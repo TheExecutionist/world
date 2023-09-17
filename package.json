@@ -1,0 +1,31 @@
+{
+    "name": "woomy-arras",
+    "version": "v0.0.1",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "deploy-event": "node ./server/deploying/minification.js && node ./server/deploying/event.js && rivet deploy -n event",
+        "deploy-beta": "node ./server/deploying/minification.js && node ./server/deploying/beta.js && rivet deploy -n beta", 
+        "deploy-prod": "node ./server/deploying/minification.js && node ./server/deploying/prod.js && rivet deploy -n prod"
+    },
+    "dependencies": {
+        "@rivet-gg/api": "^0.0.1-rc19",
+        "body-parser": "^1.20.2",
+        "compression": "^1.7.4",
+        "cors": "latest",
+        "dotenv": "^16.1.4",
+        "express": "latest",
+        "express-minify": "latest",
+        "express-ws": "latest",
+        "forwarded-for": "latest",
+        "javascript-obfuscator": "^4.0.2",
+        "node-fetch": "^2.6.7",
+        "node-os-utils": "^1.3.7",
+        "public-ip": "^6.0.1",
+        "uglify-js": "latest",
+        "ws": "latest"
+    },
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
