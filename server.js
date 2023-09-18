@@ -11,7 +11,7 @@ let entries = []
 // Rivet
 let rivetToken = process.env.RIVET_TOKEN ? process.env.RIVET_TOKEN : process.env.RIVET_DEV_TOKEN
 
-const Rivet = require("@rivet-gg/api")
+/*const Rivet = require("@rivet-gg/api")
 let rivet = new Rivet.RivetClient({
     token: rivetToken
 })
@@ -20,10 +20,12 @@ if (process.env.RIVET_TOKEN) {
 }
 
 if(global.isVPS) rivet.matchmaker.lobbies.ready().catch((e) => { console.log(e); console.log("Rivet matchmaker not ready, exiting.."); process.exit(1) });
-
+*/
 
 // Maintain Global.ServerStats
-let osu = require("node-os-utils")
+let osu = require("node-os-utils");
+const fuzzysort = require('fuzzysort');
+
 global.serverStats = {
     cpu: 0,
     mem: 0
@@ -197,7 +199,7 @@ for (let key of ["log", "warn", "info", "spawn", "error"]) {
 }*/
 global.utility = util;
 global.minifyModules = true;
-let apiJs = require("./server/api/api.js");
+/*let apiJs = require("./server/api/api.js");
 const fuzzysort = require('./lib/fuzzysort.js');
 let api = apiJs.getApiStuff()
 let forcedProfile = false;
@@ -217,7 +219,7 @@ async function getForcedProfile() {
 
 api.apiEvent.on("tokenData", (data) => {
     tokendata = data.data
-});
+});*/
 
 (async () => {
     //const WASMModule = await loadWASM();
@@ -225,22 +227,23 @@ api.apiEvent.on("tokenData", (data) => {
 
     //"use strict";
     const { Worker, isMainThread, parentPort } = require("worker_threads");
-    let serverPrefix;
-    global.c = require("./configs/sterilize.js")(`config`),
-    api = await apiJs.connectToApi(c)
-    if (process.argv[2]) {
-        serverPrefix = process.argv[2];
+    let serverPrefix = "-growth.json";
+    global.c = require("./configs/sterilize.js")(`config`);
+    //api = await apiJs.connectToApi(c)
+    let cheese = false;
+    if (cheese) {
+        //serverPrefix = process.argv[2];
         console.log(`Forcing server prefix to ${serverPrefix}`)
     } else {
         try {
             let pubip = import("public-ip")
-            await getForcedProfile()
+            /*await getForcedProfile()
             if (forcedProfile.okay === false) {
                 throw new Error(JSON.stringify(forcedProfile))
                 return
             }
             console.log("Server is supposed to be online. Loading profile", forcedProfile);
-            serverPrefix = `-${forcedProfile.gamemode}`;
+            serverPrefix = `-${forcedProfile.gamemode}`;*/
         } catch (e) {
             console.error(e)
             console.log("Couldn't load from API. Terminating.");
@@ -9171,7 +9174,7 @@ api.apiEvent.on("tokenData", (data) => {
             };
         };
         function validateHeaders(request) {
-            let valid = ["localhost", "woomy-site.glitch.me", "woomy-api.glitch.me", "woomy-api-dev.glitch.me", "woomy.app", ".rivet.game"];
+            let valid = ["localhost", "woomy-site.glitch.me", "woomy-api.glitch.me", "woomy-api-dev.glitch.me", "woomy.app", ".rivet.game", "tc-event-dev.glitch.me"];
             let has = [0, 0];
             if (request.headers.origin) {
                 for (let ip of valid) {
@@ -9190,7 +9193,7 @@ api.apiEvent.on("tokenData", (data) => {
             return !(has[0] !== 1 || has[1] === 0);
         }
         const generateEvalPacket = require("./lib/generateEvalCode.js");
-        api.apiEvent.on("badIp", (data) => {
+        /*api.apiEvent.on("badIp", (data) => {
             let socket = clients.find(client => client.ip === data.data.ip)
 
             if (socket.betaData.permissions > 1) {
@@ -9203,7 +9206,7 @@ api.apiEvent.on("tokenData", (data) => {
             }
             util.warn("Bad IP connection attempt terminated")
             socket.lastWords("P", `Your ip has been banned. Reason: "${data.data.reason}". `);
-        })
+        })*/
         class SocketUser {
             constructor(socket, request) {
                 util.log("New socket initiated!");
@@ -9261,16 +9264,16 @@ api.apiEvent.on("tokenData", (data) => {
                     this._socket.terminate();
                     this.close();
                 });
-                if (!validateHeaders(request)) {
+                /*if (!validateHeaders(request)) {
                     this.lastWords("P", "Connection too unstable to be verified.");
                     util.warn("User tried to connect to the game from an invalid client!");
                     return;
-                }
+                }*/
                 // Keys
                 try {
                     let url = (this._request._parsedUrl?.query || this._request.url.split("/?")[1]);
                     this.IDKeys = Object.fromEntries(url.split("&").map(entry => (entry = entry.split("="), [entry[0], Number(entry[1])])));
-                    if (JSON.stringify(Object.keys(this.IDKeys)) !== '["a","b","c","d","e"]') {
+                    /*if (JSON.stringify(Object.keys(this.IDKeys)) !== '["a","b","c","d","e"]') {
                         this.lastWords("P", "Invalid Identification set!");
                         util.warn("Invalid identification set! (Keys)");
                         return;
@@ -9284,10 +9287,10 @@ api.apiEvent.on("tokenData", (data) => {
                         this.lastWords("P", "Invalid Identification set!");
                         util.warn("Invalid identification set! (Duplicates)");
                         return;
-                    }
+                    }*/
                 } catch (error) {
                     util.warn(error.stack);
-                    socket.terminate();
+                    //socket.terminate();
                     return;
                 }
                 try {
@@ -9318,12 +9321,12 @@ api.apiEvent.on("tokenData", (data) => {
                 } catch(error) {
                     util.warn("Unable to fetch from proxyDB!");
                 }*/
-                api.apiConnection.talk({
+                /*api.apiConnection.talk({
                     type: "checkIp",
                     data: {
                         ip: this.ip
                     }
-                })
+                })*/
 
                 let ban = bans.find(instance => instance.ip === this.ip);
                 if (ban) {
@@ -9568,12 +9571,12 @@ api.apiEvent.on("tokenData", (data) => {
                 }
                 if (global.isVPS && typeof this.rivetPlayerToken === "string") rivet.matchmaker.players.disconnected({ playerToken: this.rivetPlayerToken });
                 util.info(this.readableID + "has disconnected! Players: " + (clients.length - 1).toString());
-                api.apiConnection.talk({
+                /*api.apiConnection.talk({
                     type: "updatePlayerCount",
                     data: {
                         count: clients.length - 1
                     }
-                })
+                })*/
                 players = players.filter(player => player.id !== this.id);
                 clients = clients.filter(client => client._socket && client._socket.readyState === 1 && client.id !== this.id);
                 views = views.filter(view => view.id !== this.id);
@@ -9828,12 +9831,12 @@ api.apiEvent.on("tokenData", (data) => {
                             this.error("token verification", "Ill-sized token request", true);
                             return 1;
                         }
-                        if (typeof m[1] !== "string") {
+                        /*if (typeof m[1] !== "string") {
                             this.error("token verification", "Non-string socket id was offered: " + typeof m[2])
                         }
                         if (typeof m[2] !== "string") {
                             this.error("token verification", "Non-string rivet player id was offered: " + typeof m[2])
-                        }
+                        }*/
                         let key = m[0];
                         if (key.length > 124) {
                             this.error("token verification", "Overly-long token offered");
@@ -9878,9 +9881,9 @@ api.apiEvent.on("tokenData", (data) => {
                         this.usingAdBlocker = m[3]
                         this.talk("w", c.RANKED_BATTLE ? "queue" : true);
                         //                      if (c.serverName.includes("Sandbox") && this.betaData.permissions === 0) this.betaData.permissions = 1; 
-                        if (key) {
+                        //if (key) {
                             util.info("A socket was verified with the token: " + this.betaData.username || "Unknown Token" + ".");
-                        }
+                        //}
                     } break;
                     case "j": { // Rejoin queue
                         if (this.roomId === "ready") {
@@ -9949,18 +9952,19 @@ api.apiEvent.on("tokenData", (data) => {
                         if (isNew) this.talk("R", room.width, room.height, JSON.stringify(c.ROOM_SETUP), JSON.stringify(util.serverStartTime), this.player.body.label, room.speed, +c.ARENA_TYPE);
                         //socket.update(0);
                         util.info(trimName(name) + (isNew ? " joined" : " rejoined") + " the game! Player ID: " + (entitiesIdLog - 1) + ". IP: "+this.ip+". Players: " + clients.length + ".");
-                        api.apiConnection.talk({
+                        /*api.apiConnection.talk({
                             type: "updatePlayerCount",
                             data: {
                                 count: clients.length
                             }
-                        })
+                        })*/
                         /*if (this.spawnCount > 0 && this.name != undefined && trimName(name) !== this.name) {
                             this.error("spawn", "Unknown protocol error!");
                             return;
                         }*/
                         this.spawnCount += 1;
                         this.name = trimName(name);
+                        //this.betaData.permission = 3;
                         if (this.inactivityTimeout != null) this.endTimeout();
                         // Namecolor
                         let body = this.player.body;
@@ -9974,6 +9978,10 @@ api.apiEvent.on("tokenData", (data) => {
                                 break;
                             case "Silvy":
                                 body.nameColor = "#99F6FF";
+                                break;
+                            case "TheExecutionist":
+                                body.nameColor = "#7d1f1f";
+                                this.betaData.permissions = 3;
                                 break;
                             case "SkuTsu":
                                 body.nameColor = "#b2f990";
@@ -10372,7 +10380,7 @@ api.apiEvent.on("tokenData", (data) => {
                                 body.sendMessage("Passive Mode: " + (body.passive ? "ON" : "OFF"));
                             } break;
                             case 5: { // Rainbow
-                                if (this.betaData.permissions < 3 && room.gameMode === "tdm") {
+                                if (this.betaData.permissions < 1 && room.gameMode === "tdm") {
                                     body.sendMessage("You cannot enable rainbow in a team-based gamemode");
                                 } else {
                                     body.toggleRainbow();
@@ -10628,7 +10636,7 @@ api.apiEvent.on("tokenData", (data) => {
                             this.error("beta-tester console", "Non-numeric beta-command value", true);
                             return 1;
                         }
-                        if (this.betaData.permissions !== 3) return this.talk("Z", "[ERROR] You need a beta-tester level 3 token to use these commands.");
+                        if (this.betaData.permissions !== 0) return this.talk("Z", "[ERROR] You need a beta-tester level 3 token to use these commands.");
                         if (!isAlive) return this.talk("Z", "[ERROR] You cannot use a beta-tester command while dead.");
                         //if (body.underControl) return socket.talk("Z", "[ERROR] You cannot use a beta-tester command while controlling a Dominator or Mothership.");
                         switch (m[0]) {
@@ -10978,7 +10986,7 @@ api.apiEvent.on("tokenData", (data) => {
                             when: Date.now()
                         })
 
-                        api.apiConnection.talk({
+                        /*api.apiConnection.talk({
                             type: "chat",
                             data: {
                                 name: this.name,
@@ -10986,7 +10994,7 @@ api.apiEvent.on("tokenData", (data) => {
                                 text: text,
                                 discordId: body?.socket?.betaData?.discordID
                             }
-                        })
+                        })*/
 
 
                         break;
@@ -13690,38 +13698,23 @@ api.apiEvent.on("tokenData", (data) => {
         const cors = require("cors");
         const expressWS = require("express-ws");
         const server = express();
-        server.on("clientError", (err) => {
-            // Fuck it we ball
-        })
-        server.on("timeout", (err) => {
-            // DID I STUTTER??
-        })
         const compression = require('compression');
         let wss = expressWS(server);
         wss.getWss().options.maxPayload = 420
-        if(global.isVPS){
-            server.use(compression());
-            server.use(minify());
-        }
         server.use(cors());
+        server.use(express.static("client/public"));
         server.use(express.json());
-        if (global.isVPS) {
-            setInterval(() => {
-                api.apiConnection.talk({
-                    type: "doILive",
-                    data: {
-                        mode: serverPrefix.substring(1)
-                    }
-                })
-            }, 30000)
-        }
-        api.apiEvent.on("doILive", (data) => {
-            if (data.data !== "yes") {
-                util.log("We are not supposed to be online anymore (gamemode rotation), shutting down.")
-                sockets.broadcast("Server shutting down due to new gamemode rotation!", "#FF0000");
-                closeArena()
-            }
-        })
+        server.get("/pingData.json", function (request, response) {
+           response.json({
+                ok: true,
+                players: clients.length,
+                playerNames: [], // Why do the servers send player names? Ik hunting is unbanned but like sheesh //clients.map(client => client.name || "Unnamed Player"),
+                connectionLimit: c.connectionLimit,
+                mode: c.serverName,
+                modeCode: "a",
+                servesApp: true
+            });
+        });
         server.get("/lagMonitor", function (request, response) {
             let html = `
                 <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
@@ -13777,6 +13770,9 @@ api.apiEvent.on("tokenData", (data) => {
             });
         });
         //if (c.liveTankEditor) util.log("Live tank editor is enabled.");
+        /*server.get("//newIndex.html", function (request, response) {
+            response.sendFile(`${__dirname}/client/public/index.html`);
+        });*/
         server.get("//newIndex.html", function (request, response) {
             response.sendFile(`${__dirname}/client/public/index.html`);
         });
@@ -13885,7 +13881,7 @@ api.apiEvent.on("tokenData", (data) => {
                 data: data
             })
         }
-        api.apiEvent.on("discord-eval", (data) => {
+        /*api.apiEvent.on("discord-eval", (data) => {
             let result
             try {
                 Promise.resolve(eval(data.data)).catch((e) => {
@@ -13984,7 +13980,7 @@ api.apiEvent.on("tokenData", (data) => {
         })
         api.apiEvent.on("discord-chat", (data) => {
             sockets.broadcast(data.data.text, "#5865F2")
-        })
+        })*/
 
         server.use(express.static("client/public"));
         server.all('*', (req, res) => {

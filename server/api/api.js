@@ -5,11 +5,11 @@ const lobbyId = (process.env.RIVET_LOBBY_ID || `DEVELOPR-${(Math.random() * 1e4)
 
 let apiEvent = new EventEmitter()
 let apiConnection;
-async function connectToApi(c) {
+/*async function connectToApi(c) {
     apiConnection = new WebSocket(`${c.api_ws_url}/${process.env.API_CONNECTION_KEY}`)
     apiConnection.on("error", () => {
-        util.error("Issue when connecting to the api via websockets, shutting down")
-        process.exit()
+        util.error("Issue when connecting to the api via websockets, begin to shit bricks")
+        //process.exit()
     })
     apiConnection.on("open", () => {
         util.log("Connected to the api")
@@ -42,7 +42,7 @@ async function connectToApi(c) {
     return {
         apiConnection, apiEvent
     }
-}
+}*/
 
 function getApiStuff(){
     return {

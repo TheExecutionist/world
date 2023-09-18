@@ -1,34 +1,6 @@
 "use strict";
 
-// Ad stuff
-let adStatus = true;
-const _displayAds = function (toggle) {
-    try {
-        if(adStatus === toggle){
-            return
-        }
-        adStatus = toggle
-
-        let wrapperWrapper = document.getElementById("wrapperWrapper")
-        wrapperWrapper.style.justifyContent = "flex-start"
-        let bottomPageAd = document.getElementById("bottomPageAd")
-
-        if (toggle === true) {
-            wrapperWrapper.style.zIndex = 100
-            bottomPageAd.style.display = "inline-block"
-            return
-        }
-
-        wrapperWrapper.style.zIndex = -100
-        bottomPageAd.style.display = "none"
-    } catch (e) {
-        console.error(e)
-    }
-}
-
-// App.js
-function RememberScriptingIsBannable() {
-    window.didMainLoad = true
+!function () {
     const _logger = {
         _norm: function (text) {
             console.log(text);
@@ -45,105 +17,43 @@ function RememberScriptingIsBannable() {
     };
 
     "use strict";
-    function _loadImage(image, cache) {
-        const img = new Image();
-        img.src = image[0];
-        img.ready = false;
-        img.onload = function () {
-            img.ready = true;
-            //console.log(`Image "${image[1]} loaded."`);
-            cache[image[1]] = img;
-        };
-    }
     const _imageCache = (function loadImages() {
         const cache = {};
         let i = 0;
-        for (let image of [ // MUST BE PNG
-            ["../resources/IED.png", "ied"],
-            ["../resources/danksGun.png", "danksGun"],
-            ["../resources/hotwheels.png", "hotWheels"],
-            ["../resources/ned.png", "ned"],
-            ["../resources/omega.png", "omega"],
-            ["../resources/do_not_open_at_any_cost.jpg", "do_not_open_at_any_cost"],
-            ["../resources/speedy.bmp", "speedy"],
-            ["../resources/missingno.bmp", "missingno"],
-            ["../resources/ice_hue.png", "ice_hue"],
-            ["../resources/poison_hue.png", "poison_hue"],
-            ["../resources/emp_hue.png", "emp_hue"],
-            ["../resources/par_hue.png", "par_hue"],
-            ["../resources/YGlitch250.png", "fourFour"],
-            ["../resources/MarbleDecoration.png", "marble_swirl"],
+        for (let image of [
+            ["//woomy.app/resources/IED.png", "ied"],
+            ["//woomy.app/resources/danksGun.png", "danksGun"],
+            ["//woomy.app/resources/hotwheels.png", "hotWheels"],
+            ["//woomy.app/resources/ned.png", "ned"],
+            ["//woomy.app/resources/omega.png", "omega"],
+            ["//woomy.app/resources/do_not_open_at_any_cost.jpg", "do_not_open_at_any_cost"],
+            ["//woomy.app/resources/speedy.bmp", "speedy"],
+            ["//woomy.app/resources/missingno.bmp", "missingno"],
+            ["//woomy.app/resources/ice_hue.png", "ice_hue"],
+            ["//woomy.app/resources/poison_hue.png", "poison_hue"],
+            ["//woomy.app/resources/emp_hue.png", "emp_hue"],
+            ["//woomy.app/resources/par_hue.png", "par_hue"],
+            ["//woomy.app/resources/YGlitch250.png", "fourFour"],
+            ["//woomy.app/resources/MarbleDecoration.png", "marble_swirl"],
+            ["//media.discordapp.net/attachments/843395236537434192/1009290282749153331/yeah.png", "jekyll_badge"],
             ["//media.discordapp.net/attachments/995124277521166356/998978430068605058/magma.png", "fillygroove_badge"],
-            ["../resources/soccerballs.png", "soccerballs"],
-            ["../resources/ooooo_youre_a_boy_kisser.png", "boyKisser"],
-            ["../resources/tonk.png", "tonk"],
-            ["../resources/rollfac.png", "rollfac"],
-            ["../resources/fordf150.png", "f150", 2],
-            ["../resources/fordf150Flipped.png", "f150Flipped", 2],
-            ["../resources/treadmarks.png", "treadmarks"],
-            ["../resources/seniorpentagon.png", "seniorpentagon"]
+            ["//woomy.app/resources/oblivion_badge.png", "oblivion_badge"]
         ]) {
             setTimeout(() => {
-                if (image[2]) {
-                    let file = image[0].split(".png")[0]
-                    for (let i = 0; i < image[2]; i++) {
-                        _loadImage([`${file}-${i}.png`, `${image[1]}-${i}`], cache)
-                    }
-                } else {
-                    _loadImage(image, cache)
-                }
+                const img = new Image();
+                img.src = image[0];
+                img.ready = false;
+                img.onload = function () {
+                    img.ready = true;
+                    //console.log(`Image "${image[1]} loaded."`);
+                    cache[image[1]] = img;
+                };
             }, 5 * i++);
         };
         return (cache);
     })();
-    let _getSearchFromUrl = (thing) => {
-        const url = new URL(window.location)
-        return url.searchParams.get(thing)
-    }
-    let _decodeHash = () => {
-        let json;
-        try {
-            json = JSON.parse(atob(window.location.hash.substring(1)))
-        } catch (err) {
-            json = {}
-        }
-        return json
-    }
-    let _encodeHash = () => {
-        return window.location.hash = btoa(JSON.stringify({
-            server: _global._windowSearch.server,
-            lobby: _global._windowSearch.lobby,
-            party: _global._windowSearch.party
-        }))
-    }
     const _global = {
         _selectedServer: 0,
-        _windowSearch: {
-            _server: _decodeHash().server,
-            _lobby: _decodeHash().lobby,
-            _party: _decodeHash().party,
-            set server(v) {
-                this._server = v
-                _encodeHash()
-            },
-            get server() {
-                return this._server
-            },
-            set lobby(v) {
-                this._lobby = v
-                _encodeHash()
-            },
-            get lobby() {
-                return this._lobby
-            },
-            set party(v) {
-                this._party = v
-                _encodeHash()
-            },
-            get party() {
-                return this._party
-            }
-        },
         mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|android|mobi/i.test(navigator.userAgent),
         guiMouse: {
             x: 0,
@@ -156,6 +66,7 @@ function RememberScriptingIsBannable() {
             ry: 0,
         },
         _sendMessageToClient: (text) => { },
+        servers: [],
         _mapType: 0,
         _killTracker: 0,
         _forceTwiggle: false,
@@ -206,26 +117,19 @@ function RememberScriptingIsBannable() {
         KEY_RAINBOW: 187,
         KEY_RAINBOW_2: 61,
         KEY_DEBUG: 76,
-        KEY_CLASS_TREE: -69, //85, Disabled for now due to new mockup system
+        KEY_CLASS_TREE: 85,
         KEY_TIER_SWITCH: 79,
         KEY_TIER_SWITCH_2: 81,
         KEY_OVERRIDE_ENTITY: 86,
         KEY_INFECT_MINION: 73,
+        KEY_SUBMERGE: 190,
+        KEY_HYDRO: 188,
         KEY_RESET_COLOR: 89,
         KEY_CONTROL_DOM: 72,
         KEY_TANK_JOURNEY: 220,
         KEY_KILL_WITH_MOUSE: 71,
         KEY_STEALTH: 74,
         KEY_DRAG: 90,
-        DEV_KEY_1: 35,
-        DEV_KEY_2: 40,
-        DEV_KEY_3: 34,
-        DEV_KEY_4: 37,
-        DEV_KEY_5: 12,
-        DEV_KEY_6: 49,
-        DEV_KEY_7: 36,
-        DEV_KEY_8: 38,
-        DEV_KEY_9: 33,
         _screenWidth: 0,
         _screenHeight: 0,
         _gameWidth: 0,
@@ -233,15 +137,22 @@ function RememberScriptingIsBannable() {
         _gameStart: false,
         _disconnected: false,
         _died: false,
-        _deathScreenState: 1, // 0 = on | 1 = off
         _loadingMockups: true,
         _debug: 1,
         _showTree: false,
         _scrollX: 0,
         _realScrollX: 0,
-        _disconnectReason: "The connection was lost for an unknown reason.\nPlease press F12 or ctrl+shift+i then click on the console tab and take a screenshot, then send it in the discord.",
+        _disconnectReason: "The connection was lost for an unknown reason. Maybe check your internet, or if the server is down?",
         _disableEnter: false,
         _seeInvisible: false,
+        _screenScale: (function () {
+            let element = document.getElementById("mainWrapper");
+            let scalval = 130; ///Android|webOS|iPhone|iPad|iPod|BlackBerry|android|mobi/i.test(navigator.userAgent) ? 150 : 120;
+            return setInterval(() => {
+                if (navigator.userAgent.search("Firefox") === -1) element.style.zoom = `${Math.round(Math.min(window.innerWidth / 1920, window.innerHeight / 1080) * scalval)}%`;
+                //else element.style["-moz-transform"] = `scale(${Math.min(window.innerWidth / 1920, window.innerHeight / 1080)}) translate(0, ${window.innerHeight / 2}px)`;
+            }, 25)
+        })(),
         _tipSplash: [
             "Press the E key to enable autofire.",
             "Press the C key to enable autospin.",
@@ -270,6 +181,7 @@ function RememberScriptingIsBannable() {
             "Sanctuaries can be seen on the minimap, and will spawn a boss when killed.",
             "Hitting the enemy deals more damage than not hitting them.",
             "If you can't take a joke, press Alt+F4 for godmode.",
+            "If you see a Strike Carrier on the leaderboard, RUN.",
             "Developers are marked by their badges next to their names.",
             "Developers typically have very fancy names.",
             'Import "Secret5"...',
@@ -310,7 +222,6 @@ function RememberScriptingIsBannable() {
             "Mald",
             "YO WE GOT THAT IN VIDEOOOOOOOO"
         ],
-        _deathSplashOverride: 0,
         _deathSplashChoice: 0,
         _tankMenuColor: 0,
         _tankMenuColorReal: 100 + Math.round(Math.random() * 70),
@@ -327,12 +238,26 @@ function RememberScriptingIsBannable() {
             _out: 0,
             _in: 0
         },
-        _sentPackets: 80085,
-        _receivedPackets: 80085,
         displayTextUI: {
             enabled: false,
-            text: "",
-            color: "#FFFFFF"
+            text: ""
+        },
+        submarineUI: {
+            enabled: false,
+            submerged: false,
+            air: 0,
+            hydro: false
+        },
+        strikeCarrierUI: {
+            enabled: false,
+            selection: [-1, -1],
+            buttons: [],
+            map: {
+                x: 0,
+                y: 0,
+                size: 0
+            },
+            data: {}
         },
         _waterAnimation: .5,
         _waterDirection: 1,
@@ -342,8 +267,6 @@ function RememberScriptingIsBannable() {
         },
         _screenSize: Math.min(1920, Math.max(window.innerWidth, 1280)),
         _mobileOptions: false,
-        _mobileFiring: [4, false],
-        _mobileChatText: "Chat",
         _standalone: window.navigator.standalone || (window.matchMedia && window.matchMedia("(display-mode: fullscreen), (display-mode: standalone), (display-mode: minimal-ui)").matches),
         _nameGradient: (function getGradient() {
             const gradients = [
@@ -373,15 +296,13 @@ function RememberScriptingIsBannable() {
             return gradients[index];
         })(),
     };
-    _global.doParseTree = function parseTree(mockups) {
+    _global.parsedTreeData = (function parseTree(mockups) {
         let tiles = [],
             branches = [],
             measureSize = (x, y, colorIndex, {
                 index,
                 tier = 0
-            }, lTier = 0) => {
-                tier < 0 && (tier = 0);
-                lTier > tier && (tier = lTier + 1);
+            }) => {
                 tiles.push({
                     x,
                     y,
@@ -396,7 +317,7 @@ function RememberScriptingIsBannable() {
                             height: 1
                         };
                     case 4:
-                        upgrades.forEach((u, i) => measureSize(x, y + 2 + i, i, u, tier));
+                        upgrades.forEach((u, i) => measureSize(x, y + 2 + i, i, u));
                         if (upgrades.length) branches.push([{
                             x,
                             y
@@ -406,7 +327,7 @@ function RememberScriptingIsBannable() {
                         }]);
                         return {
                             width: 1,
-                            height: 2 + (upgrades.length || 0)
+                            height: 2 + upgrades.length
                         };
                     case 3:
                     case 2:
@@ -414,9 +335,8 @@ function RememberScriptingIsBannable() {
                     case 0: {
                         let xStart = x,
                             us = upgrades.map((u, i) => {
-                                let uTier = u.tier <= tier ? tier + 1 : u.tier,
-                                    spacing = 2 * (uTier - tier),
-                                    measure = measureSize(x, y + spacing, i, u, tier);
+                                let spacing = 2 * (u.tier - tier),
+                                    measure = measureSize(x, y + spacing, i, u);
                                 if (upgrades.length) branches.push([{
                                     x,
                                     y: y + (i === 0 ? 0 : 1)
@@ -436,70 +356,94 @@ function RememberScriptingIsBannable() {
                             });
                         return {
                             width: us.map(r => r.width).reduce((a, b) => a + b, 0) || 1,
-                            height: 2 + Math.max(0, ...us.map(r => r.height || 1)),
+                            height: 2 + Math.max(...us.map(r => r.height)),
                         }
                     }
                 }
             },
             full = measureSize(0, 0, 0, {
-                index: _mockups.find(r => r.name === _global.searchName).index
+                index: mockups.find(r => r.name === _global.searchName).index
             });
         _global.parsedTreeData = [tiles, branches, full];
-        console.log("Upgrade tree has been parsed and is ready to be rendered.");
-    };
-    _global.parsedTreeData = null;
+        console.log("Upgrade tree has been parsed and is ready to be rendered.")
+    });
     var _socket = null;
     _global.mobileClickables = [function () { // Toggle menu
-        let clickdata = _global.clickables.mobileClicks.get()
-        if(!_global._mobileOptions){
-            for (let i = 1; i < clickdata.length; i++) {
-                clickdata[i].setActive(i<=6?1:0)
-            }
-            _global._mobileOptions = true;
-        }else{
-            for (let i = 1; i < clickdata.length; i++) {
-                clickdata[i].setActive(i>=7?1:0)
-            }
-            _global._mobileOptions = false;
-        }
+        _global._mobileOptions = !_global._mobileOptions;
     }, function () { // Level Up
         for (let i = 0; i < 75; i++) {
             setTimeout(() => _socket.talk('L'), i * 25);
         }
     }, function () { // Testbed
         _socket.talk("T", 0);
+    }, function () { // Autofire
+        _socket.talk("t", 1);
+    }, function () { // Autospin
+        _socket.talk("t", 0);
     }, function () { // Override
         _socket.talk("t", 2);
+    }, function () { // Control Team Point
+        _socket.talk("l");
     }, function () { // Reset Tank
         _socket.talk("T", 2);
-    }, function () { // Fullscreen
-        _tryFullScreen()
-    }, function () { // Chat
-        let chatbox = document.getElementById("chatBox")
-        if(!chatbox){
-            _global._mobileChatText = "Chat"
-            _global._canvas._cv.dispatchEvent(new KeyboardEvent('keydown', {
-                'keyCode': _global.KEY_CHAT
-            }));
-        }else{
-            _global._mobileChatText = "Chat"
-            chatbox.dispatchEvent(new KeyboardEvent('keydown', {
-                'keyCode': 13
-            }));
-        }
-
-    }, function(){ // Firing modes
-        _socket.cmd.set(_global._mobileFiring[0], false);
-        if(_global._mobileFiring[0] === 4){
-            _global._mobileFiring[0] = 6
-            if(_global._mobileFiring[1])_socket.cmd.set(_global._mobileFiring[0], true);
-            return
-        }
-        _global._mobileFiring[0] = 4
-        if (_global._mobileFiring[1]) _socket.cmd.set(_global._mobileFiring[0], true);
-    }, function(){
+    }, function () { // Q Key
         _socket.talk("X");
     }];
+
+    function initCarrierButtons(stuff) {
+        let output = [];
+        let i = 0;
+
+        function createButton(name, text, callback) {
+            output.push({
+                color: 100 + (6 * i),
+                tick: 0,
+                text: text,
+                click: callback,
+                enabled: true,
+                name: name
+            });
+            i++;
+        }
+        const table = {
+            "diveBomb": ["diveBomb", "Dive Bombers", function click() {
+                _socket.talk("cv", 0, "diveBomb");
+            }],
+            "carpetBomb": ["carpetBomb", "Carpet Bombers", function click() {
+                _socket.talk("cv", 0, "carpetBomb");
+            }],
+            "skipBomb": ["skipBomb", "Skip Bombers", function click() {
+                _socket.talk("cv", 0, "skipBomb");
+            }],
+            "rocket": ["rocket", "Rocket Bombers", function click() {
+                _socket.talk("cv", 0, "rocket");
+            }],
+            "mine": ["mine", "Minelayer", function click() {
+                _socket.talk("cv", 0, "mine");
+            }],
+            "torpedo": ["torpedo", "Torpedo Bombers", function click() {
+                _socket.talk("cv", 0, "torpedo");
+            }],
+            "missile": ["missile", "Missile Planes", function click() {
+                _socket.talk("cv", 0, "missile");
+            }]
+        };
+        stuff.forEach(thing => {
+            if (table[thing] != null) {
+                createButton(...table[thing]);
+            }
+        });
+        createButton("relinquish", "Relinquish", function click() {
+            _socket.talk("cv", 0, "relinquish");
+        })
+        return output;
+    }
+
+    _global.carrierUI = {
+        enabled: false,
+        init: initCarrierButtons,
+        buttons: []
+    };
     const _util = {};
     _util._submitToLocalStorage = function (name) {
         localStorage.setItem(name + "Value", document.getElementById(name).value);
@@ -507,12 +451,8 @@ function RememberScriptingIsBannable() {
         return 0;
     };
     _util._retrieveFromLocalStorage = function (name) {
-        try {
-            document.getElementById(name).value = localStorage.getItem(name + "Value");
-            document.getElementById(name).checked = localStorage.getItem(name + "Checked") === "true";
-        } catch (err) {
-
-        }
+        document.getElementById(name).value = localStorage.getItem(name + "Value");
+        document.getElementById(name).checked = localStorage.getItem(name + "Checked") === "true";
         return 0;
     };
     _util._HSL2COLOR = (function () {
@@ -603,9 +543,9 @@ function RememberScriptingIsBannable() {
     _util._formatLargeNumber = function (x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
-    _util._pullJSON = async function (filename, responseType = "json", filetypeOverride) {
+    _util._pullJSON = function (filename, responseType = "json") {
         let request = new XMLHttpRequest(),
-            url = await getFullURL(servers[_global._selectedServer], false) + "json/" + filename + (filetypeOverride !== undefined ? filetypeOverride : ".json") + "?a=" + Date.now();
+            url = getFullURL(servers[_global._selectedServer], false) + "json/" + filename + ".json?a=" + Date.now();
         _logger._info("Loading JSON from " + url);
         request.responseType = responseType;
         return new Promise(function (resolve, reject) {
@@ -626,6 +566,8 @@ function RememberScriptingIsBannable() {
     _util._getScreenRatio = () => Math.max(_global._screenWidth, 16 * _global._screenHeight / 9) / _global._screenSize;
     _util._getSpecialNameInfoById = id => [
         ["#2e6d9b", "#579acb", `'Merienda', cursive`, 1, false],
+        // Oblivion if you plan to change the badges, and force them to the weird coding icons please just remove the badges entirely.
+        ["#2F3D6A", "#F3DC8E", `'Share Tech Mono', monospace`, 1.4, "jekyll_badge"],
         ["#E673C4", "#ff00d0", `"Courier New", Courier, monospace`, 1, false],
         ["#EE8833", "#784216", `coffee`, 1, "fillygroove_badge"]
     ][id];
@@ -639,7 +581,7 @@ function RememberScriptingIsBannable() {
             this._statistics = [...Array(11)].fill(0); // [player kills, deaths, boss kills, polygon kills, best score, best time, total score, total time] crasher kills, basic deaths, director upgrades
 
             // Load statistics and achievements, then update the visual menu dom display
-            fetch(window.quickurl + "json/achievements.json"+"?v="+Date.now()).then(r => r.json()).then(json => {
+            fetch(window.quickurl + "json/achievements.json").then(r => r.json()).then(json => {
                 this._achievements = json;
                 for (let name in this._achievements) this._achievements[name].unlocked = false;
                 this._loadFromLocalStorage();
@@ -730,7 +672,7 @@ function RememberScriptingIsBannable() {
             else if (!this._achievements[id].unlocked) {
                 this._achievements[id].unlocked = true;
                 // Lol scripters gotta deal with ran int and waste time L bozo
-                localStorage.setItem(this._enc(this._storageKeyAchievement + `${id}`), (100 * Math.random).toFixed(0));
+                localStorage.setItem(this._enc(this._storageKeyAchievement + `${id}`), (100 * Math.random()).toFixed(0));
                 _global._sendMessageToClient("Achievement complete: " + this._achievements[id].title, "guiblack");
                 if (Object.keys(this._achievements).map(key => this._achievements[key]).filter(a => !a.unlocked).sort((a, b) => a.tier - b.tier).length === 1) this._unlockAchievement("the_king");
             }
@@ -811,7 +753,7 @@ function RememberScriptingIsBannable() {
             popupMessage.textContent = "Welcome to the game, welcome to the end of the game.\n\nThe King have completed every challange this game has to offer. The King has won the 4th war. The King would not give up, no matter what was in his way.\nThe King is the Player.\nYou are the player.\nYou have pushed through absolutely everything.\n\nGood Job, King.\n\nFor real though, thanks for playing this much. We hope you enjoyed and loved this game as much as we do.\n-- From Jekyll, and the rest of the dev team";
         }
     };
-    window._initOptions = function () {
+    const initOptions = function () {
         // Increase this value if you change something huge
         let CURRENTVERSION = 4;
         let saveButtonReal = false;
@@ -838,7 +780,7 @@ function RememberScriptingIsBannable() {
 
         return () => {
             let holder = document.createElement("div");
-            document.body.appendChild(holder);
+            document.getElementById("mainWrapper").appendChild(holder);
             holder.id = "optionsMenu";
             holder.className = "optionsMenu";
             holder.style.display = "none";
@@ -869,7 +811,7 @@ function RememberScriptingIsBannable() {
             }
             innerHTML += `</div><hr><br><button id="saveOptions">Save & Apply</button><button id="resetOptions">Reset Options</button><div style="float: right;"><button id="exportOptions">Export Options</button><button id="importOptions">Import Options</button></div> <br><input type="text" autofocus tabindex="0" spellcheck="false" placeholder="..." id="optionsResult"/>`;
             holder.innerHTML += innerHTML;
-            document.body.appendChild(holder);
+            document.getElementById("mainWrapper").appendChild(holder);
             document.getElementById("Woomy_theme").value = _config.Woomy["Theme"].value;
             document.getElementById("Woomy_shaders").value = _config.Woomy["Shader Casting"].value;
             document.getElementById("Woomy_filter").value = _config.Woomy["Filters"].value;
@@ -879,7 +821,7 @@ function RememberScriptingIsBannable() {
             let toggle = document.createElement("div");
             toggle.id = "settings-button";
             //if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|android|mobi/i.test(navigator.userAgent)) {
-            document.body.appendChild(toggle);
+            document.getElementById("mainWrapper").appendChild(toggle);
             //}
             let saveButton = document.getElementById("saveOptions");
             let resetButton = document.getElementById("resetOptions");
@@ -1032,6 +974,7 @@ function RememberScriptingIsBannable() {
         useFourRows: 0,
         disableMessages: 0,
         roundUpgrades: 0,
+        centerTank: false,
         drawOwnName: false,
         autoUpgrade: _global.mobile,
         tintedNest: true,
@@ -1624,12 +1567,6 @@ function RememberScriptingIsBannable() {
                 "guiblack": "#000000",
                 "paletteSize": 10,
                 "border": "0.5"
-            },
-            "amethyst": {
-                "teal": "#467b7c", "lgreen": "#79a05a", "orange": "#8a5b42", "yellow": "#FDF380", "lavender": "#B58EFD", "pink": "#a66e8e", "vlgrey": "#888891", "lgrey": "#AA9F9E", "guiwhite": "#a48ec2", "black": "#000000", "blue": "#254b74", "green": "#417e2a", "red": "#7e2525", "gold": "#8e862e", "purple": "#5c4186", "magenta": "#3d1764", "grey": "#58575b", "dgrey": "#726F6F", "white": "#665a87", "guiblack": "#000000", "paletteSize": 10, "border": 0.5
-            },
-            "fantasy": {
-                "teal": "#e43939", "lgreen": "#77ec6c", "orange": "#ed657a", "yellow": "#fdf380", "lavender": "#8c00ff", "pink": "#ff8bff", "vlgrey": "#f2f4fd", "lgrey": "#000000", "guiwhite": "#ffffff", "black": "#191919", "blue": "#3e67f4", "green": "#02cf05", "red": "#ca0020", "gold": "#fdef75", "purple": "#7a8bf4", "magenta": "#d952ff", "grey": "#4e4d50", "dgrey": "#353535", "white": "#646262", "guiblack": "#000000", "border": 0.5
             }
         };
     _global.config = _config;
@@ -2011,23 +1948,26 @@ function RememberScriptingIsBannable() {
             enabled: enabled
         }
     })();
-
-    const mixColors = (() => {
+    let mixColors = function () {
+        let h2d = function (h) {
+            return parseInt(h, 16);
+        };
         const _memory = {};
-        return function (c, s, p) {
-            const str = `${c}${s}${p.toFixed(2)}`;
-            if (_memory[str]) return _memory[str];
-            var [c, a, o] = c.match(/\w\w/g).map(e => parseInt(e, 16)), [s, n, r] = s.match(/\w\w/g).map(e => parseInt(e, 16));
-            return _memory[str] = `#${Math.round(c + (s - c) * p).toString(16).padStart(2, "0")}${Math.round(a + (n - a) * p).toString(16).padStart(2, "0")}${Math.round(o + (r - o) * p).toString(16).padStart(2, "0")}`;
-        }
-    })();
+        return function (c1, c2, weight = .5) {
+            let str = (`${c1}${c2}${weight}`);
+            if (_memory[str] != null) return _memory[str];
+            if (weight === 1) return c2;
+            if (weight === 0) return c1;
+            for (var hex = "#", i = 1; i <= 6; i += 2) {
+                for (var v1 = h2d(c2.substr(i, 2)), v2 = h2d(c1.substr(i, 2)), val = Math.floor(v2 + (v1 - v2) * weight).toString(16); val.length < 2;) val = "0" + val;
+                hex += val;
+            }
+            return (_memory[str] = hex);
+        };
+    }();
 
     function getColor(colorID) {
         switch (colorID) {
-            case -2: // suck my dick, props
-                return color.teal;
-            case -1: // Only used for shinies to detect the achievement
-                return color.teal;
             case 0:
                 return color.teal;
             case 1:
@@ -2120,7 +2060,7 @@ function RememberScriptingIsBannable() {
                 return "#00EEA4";
             case 45: // Red team trench warfare door color (closed)
                 return mixColors(color.red, color.grey, .8);
-            case 46: // Red team trench warfare door color (open) and sporulator colors
+            case 46: // Red team trench warfare door color (open)
                 return mixColors(color.green, color.grey, .8);
             // Rainbow Colors
             case 100:
@@ -2539,101 +2479,11 @@ function RememberScriptingIsBannable() {
                 return "#80B0FF";
             case 306:
                 return "#A2C5FF";
-            case 307:
-                return "#bed9f5";
-            case 308:
-                return "#e0e2fe";
-            case 309:
-                return "#9495f7";
-            case 310:
-                return "#f5b900";
-            case 311:
-                return "#f08b00";
-            case 312:
-                return "#df3b00";
-            case 313:
-                return "#474574";
-            case 314:
-                return "#615DAA";
-            case 315:
-                return "#8782DB";
-            case 316: //Enraged Kamikaze
-                return "#ff3232";
-            case 317: //Steel-String
-                return "#979797";
-            case 318: // Oppressors
-                return "#a5bdd7";
-            case 319: // Sorcerer Drone
-                return "#c6d9ef";
-            case 320: // Enchantress Drone
-                return "#c65f51";
-            case 321: // the excorcist
-                return "#956db0";
-            case 322: // Scorched
-                return "#fe5f00";
-            case 323: // viviyellow
-                return "#f6e338";
-            case 324: // vivired
-                return "#f63838";
-            case 325: // viviblue
-                return "#3897f6";
-            case 326: // vivigreen
-                return "#53f638";
-            case 327: // forestizer 1
-                return "#046c10";
-            case 328: // forestizer 2
-                return "#4cb02f";
-            case 329: // forestizer 3
-                return "#9fcc8c";
-            case 330: // forestizer 4
-                return "#052f08";
-            case 331: // forestizer wood
-                return "#e8cb8e";
-            case 332: // forestizer 6
-                return "#2d9133";
-            case 327.5: // forestizer red 1
-                return "#cf0116";
-            case 328.5: // forestizer red 2
-                return "#d50028";
-            case 329.5: // forestizer red 3
-                return "#e7406f";
-            case 330.5: // forestizer red 4
-                return "#5b0001";
-            case 332.5: // forestizer red 5
-                return "#d60014";
-            case 333: // forestizer red 3
-                return "#e7406f";
-            case 334: // forestizer red 4
-                return "#5b0001";
-            case 335: // #PATRIOTISM
-                return "#194187";
-            case 336: // #PATRIOTISM
-                return "#6cbbc2";
             // Misc
             case "rainbow":
                 return "#" + Math.floor(Math.random() * 16777215).toString(16);
             case "FFA_RED":
                 return color.red;
-            case 337: // Lavender
-                return "#AB6AB5";
-            case 338: 
-                return "#A39EFF";
-            case 339: 
-                return "#FF7E67";
-            case 340: 
-                return "#CD004C";
-            case 341:
-                return "#5BCEF5";
-            case 342: 
-                return "#feb940";
-            case 343:
-                return "#a8b3c6";
-            case 344: 
-                return "#9fc1dc";
-            case 345:
-                return "#8dd1eb";
-            case 346: 
-                return "#78e1f2"; 
             default:
                 return "#F00";
         }
@@ -2658,6 +2508,12 @@ function RememberScriptingIsBannable() {
                 case 4:
                     return mixColors(color.pink, color.guiwhite, 1 / 3);
             }
+        }
+        if (cell === "norm" && _global.gamemodeAlteration === "cv") {
+            if (seed !== 1) {
+                seed *= (seed > .5) ? 1.5 : .75;
+            }
+            return mixColors(color.blue, color.white, _global._waterAnimation * seed);
         }
         switch (cell) {
             case "n_b1":
@@ -2762,122 +2618,8 @@ function RememberScriptingIsBannable() {
         };
         return Math.atan2(res.y, res.x);
     }
-
-    const bounceyLerp = (()=>{
-        let b1 = 4 / 11,
-            b2 = 6 / 11,
-            b3 = 8 / 11,
-            b4 = 3 / 4,
-            b5 = 9 / 11,
-            b6 = 10 / 11,
-            b7 = 15 / 16,
-            b8 = 21 / 22,
-            b9 = 63 / 64,
-            b0 = 1 / b1 / b1;
-
-        function In(t) {
-            return 1 - out(1 - t);
-        }
-
-        function out(t) {
-            return (t = +t) < b1 ? b0 * t * t : t < b3 ? b0 * (t -= b2) * t + b4 : t < b6 ? b0 * (t -= b5) * t + b7 : b0 * (t -= b8) * t + b9;
-        }
-
-        function inOut(t) {
-            return ((t *= 2) <= 1 ? 1 - out(1 - t) : out(t - 1) + 1) / 2;
-        }
-
-        return {
-            in: In,
-            out,
-            inOut
-        }
-    })()
-
-    const expLerp = (() => {
-        function tpmt(x) {
-            return (Math.pow(2, -10 * x) - 0.0009765625) * 1.0009775171065494;
-        }
-        function In(t) {
-            return tpmt(1 - +t);
-        }
-
-        function out(t) {
-            return 1 - tpmt(t);
-        }
-
-        function inOut(t) {
-            return ((t *= 2) <= 1 ? tpmt(1 - t) : 2 - tpmt(t - 1)) / 2;
-        }
-
-        return {
-            in: In,
-            out,
-            inOut
-        }
-    })()
-
-    const quadLerp = (()=>{
-        function In(t) {
-            return t * t;
-        }
-
-        function out(t) {
-            return t * (2 - t);
-        }
-
-        function inOut(t) {
-            return ((t *= 2) <= 1 ? t * t : --t * (2 - t) + 1) / 2;
-        }
-        return {
-            in: In,
-            out,
-            inOut
-        }
-    })()
-
-
-    let _mockups = {
-        // Statistics
-        _totalMockups: 0,
-        _fetchedMockups: 0,
-
-        // Data handling
-        _mockupData: new Map(),
-        _pendingMockupRequests: new Set(),
-        get: (entityIndex, doExtraSeek=true) => {
-            let entity = _mockups._mockupData.get(entityIndex)
-            if (entity) {// We have the entity
-                return entity
-            } else if (_mockups._pendingMockupRequests.has(entityIndex)) {// We are getting the entity
-                return _mockups._defaults
-            } else { // We need to queue the entity
-                if (navigator?.connection?.downlink>3.5&&doExtraSeek) {
-                    /* 
-                    Extra seek helps with animation tanks because not 100% of the frames are actually sent
-                    This also helps with loading stuff in general, however you are downloading 5x more data than you really need to.
-                    Because of that we should only do this if the user has better than 3.5mbs internet.
-                    Downlink is somewhat supported but its better to be safe than sorry.
-                    */
-                    for (let i = -5; i < 6; i++) {
-                        _mockups.get(entityIndex+i, false)
-                    }
-                }else{
-                    _mockups._pendingMockupRequests.add(entityIndex)
-                    _socket.talk("mu", entityIndex)
-                }
-                return _mockups._defaults
-            }
-        },
-        set: (entityIndex, data) => {
-            _mockups._fetchedMockups++
-            _mockups._mockupData.set(entityIndex, _mockups._applyDefaults(data))
-        },
-
-        // Defaults
-        _defaults: { 
-            isLoading: true,
-            name: "Loading..",
+    let _mockups = [],
+        mockupDefaults = {
             x: 0,
             y: 0,
             color: 16,
@@ -2891,33 +2633,13 @@ function RememberScriptingIsBannable() {
             aspect: 1,
             skin: 0,
             colorUnmix: 0,
-            angle: 0,
-            position: {
-                middle: {
-                    x: 0,
-                    y: 0,
-                },
-                axis: 0
-            },
-            guns: [],
-            turrets: [],
-            lasers: [],
-            props: []
-        },
-        _applyDefaults: (_data) => {
-            _data.turrets = (_data.turrets || []).map(_mockups._applyDefaults);
-            for (const key in _mockups._defaults) {
-                if (_data[key] == null) {
-                    _data[key] = _mockups._defaults[key];
-                }
-            }
-            return _data;
-        }
-    };
-
-
+            angle: 0
+        };
+    /*util.pullJSON(`mockups${prefix}`).then(function(data) {
+        return mockups = data;
+    });*/
     function getEntityImageFromMockup(index, color) {
-        let mockup = _mockups.get(index);
+        let mockup = _mockups[index];
         if (!mockup) throw new Error("Failed to find mockup " + index);
         color = mockup.color == null || mockup.color === 16 ? arguments[1] : mockup.color;
         return {
@@ -3015,8 +2737,8 @@ function RememberScriptingIsBannable() {
                             dy = Math.round(target.y - region._y);
                         return active && dx >= 0 && dy >= 0 && dx <= region._w && dy <= region._h;
                     },
-                    setActive: function (v) {
-                        active = v;
+                    hide: function () {
+                        active = 0;
                     }
                 };
             }
@@ -3033,10 +2755,7 @@ function RememberScriptingIsBannable() {
                         data[index].set(...a);
                     },
                     hide: function () {
-                        for (let r of data) r.setActive(0);
-                    },
-                    get: function () {
-                        return data
+                        for (let r of data) r.hide();
                     },
                     check: function (x) {
                         return data.findIndex(function (r) {
@@ -3048,11 +2767,13 @@ function RememberScriptingIsBannable() {
         }();
         return {
             stat: Region(10),
-            upgrade: Region(40),
+            upgrade: Region(30),
             hover: Region(1),
             skipUpgrades: Region(1),
             mobileClicks: Region(_global.mobileClickables.length),
-            tree: Region(1)
+            carrier: Region(24),
+            tree: Region(1),
+            toggleStrikeCarrier: Region(1)
         };
     }();
     _global.statHover = 0;
@@ -3069,12 +2790,9 @@ function RememberScriptingIsBannable() {
             _lastlag: 0,
             _lastrender: 0,
             _rendergap: 0,
-            _lastuplink: 0,
-            _serverCpuUsage: 0,
-            _serverMemUsage: 0
+            _lastuplink: 0
         },
         lastPing = 0,
-        lastServerStat = 0,
         renderTimes = 0,
         updateTimes = 0,
         roomSetup = [
@@ -3168,13 +2886,12 @@ function RememberScriptingIsBannable() {
             }],
             _points: 0,
             _upgrades: [],
-            _realUpgrades: [],
             _playerid: -1,
             _skill: function () {
                 let levelScore = 0,
                     deduction = 0,
                     level = 0,
-                    score = Smoothbar(0);
+                    score = Smoothbar(0, 10);
                 return {
                     setScores: function (s) {
                         if (s) {
@@ -3206,7 +2923,7 @@ function RememberScriptingIsBannable() {
                                 deduction = 0;
                             }
                         } else {
-                            score = Smoothbar(0);
+                            score = Smoothbar(0, 10);
                             level = 0;
                         }
                     },
@@ -3237,7 +2954,7 @@ function RememberScriptingIsBannable() {
                 _display: [],
                 _server: [],
                 _publish: (old, entry) => {
-                    let ref = _mockups.get(entry.index);
+                    let ref = _mockups[entry.index];
                     return {
                         /*
                         Math.round(c.serverName.includes("Mothership") ? entry.health.amount : entry.skill.score),
@@ -3252,8 +2969,8 @@ function RememberScriptingIsBannable() {
                         image: getEntityImageFromMockup(entry.index, entry.color),
                         position: ref.position,
                         barColor: getColor(entry.barColor),
-                        label: entry.name ? entry.name + " - " + (entry.label || ref.name) : (entry.label || ref.name),
-                        score: lerp(old.score, entry.score, 0.03),
+                        label: entry.name ? entry.name + " - " + ref.name : ref.name,
+                        score: lerp(old.score, entry.score, .005),
                         nameColor: entry.nameColor,
                     }
                 }
@@ -3277,13 +2994,13 @@ function RememberScriptingIsBannable() {
         return Math.max(_global._screenWidth / _player._renderv, _global._screenHeight / _player._renderv / 9 * 16);
     };
 
-    function resizeEvent(e) {
+    function resizeEvent() {
         let scale = window.devicePixelRatio;
         scale *= [0.2, 0.5, 0.75, 1, 0.08][["Very Low (35%)", "Low (50%)", "Medium (75%)", "High (100%)", "PixelMode (8%)"].indexOf(_config.resolutionScale)];
         c.width = _global._screenWidth = window.innerWidth * scale;
         c.height = _global._screenHeight = window.innerHeight * scale;
         _global._ratio = scale;
-        if(!_global.mobile)document.getElementById('gameCanvas').focus();
+        document.getElementById('gameCanvas').focus();
         _global._screenSize = Math.min(1920, Math.max(window.innerWidth, 1280));
     }
     let _animations = ((module) => {
@@ -3333,18 +3050,9 @@ function RememberScriptingIsBannable() {
         return library;
     })(window);
     window.onload = function () {
-        if (window.didWindowLoad) return
-        window.didWindowLoad = true
         if (/MSIE 10/i.test(navigator.userAgent) || /MSIE 9/i.test(navigator.userAgent) || /rv:11.0/i.test(navigator.userAgent)) window.alert('We see you are using Internet Explorer. We highly suggest you use Chrome, Firefox, or some other non-IE/Edge browser, because stuff will otherwise be broken.');
         if (/Edge\/\d./i.test(navigator.userAgent)) window.alert('We see you are using Microsoft Edge. We highly suggest you use Chrome, Firefox, or some other non-IE/Edge browser, because stuff will otherwise be broken.');
-        let siteIsValid = false
-        let siteArray = ["host", "", "woomy-api.glitch.me", "woomy-site.glitch.me", "woomy.app", ".rivet.game"]
-        for (let part of siteArray) {
-            if (window.location.hostname.includes(part)) {
-                siteIsValid = true
-            }
-        }
-        if (window !== window.top) siteIsValid = false
+        //if (window !== window.top || (["localhost", "", "arras-deve10per.glitch.me", "woomy-arras.netlify.app", "woomy-arras.xyz", "www.woomy-arras.xyz", "development.woomy-arras.xyz"].indexOf(window.location.hostname) === -1)) window.location.hostname = 'arras-deve10per.glitch.me';
         //if (typeof localStorage.gamemodeID === "undefined") localStorage.gamemodeID = "0";
         _config.Woomy = (() => {
             let library = {};
@@ -3398,7 +3106,7 @@ function RememberScriptingIsBannable() {
             new Setting("darkBorders", "Dark Borders", "boolean", false);
             new Setting("rgbBorders", "Rainbow Borders", "boolean", false);
             new Setting("glassMode", "Glass Mode", "boolean", false);
-            new Setting("pointy", "Sharp Borders", "boolean", false);
+            new Setting("pointy", "Sharp Borders", "boolean", true);
             new Setting("inverseBorderColor", "Inverse Border Color", "boolean", false);
             new Setting("noBorders", "No Borders", "boolean", false);
             new Setting("tintedNest", "Tinted Nest", "boolean", true);
@@ -3406,15 +3114,16 @@ function RememberScriptingIsBannable() {
             new Setting("miterText", "Sharp Text", "boolean", false);
             new Setting("tintedHealth", "Tinted Health Bars", "boolean", true);
             new Setting("coloredHealthBars", "Colored Health Bars", "boolean", false);
-            new Setting("shieldbars", "Split Health Bars", "boolean", true);
+            new Setting("shieldbars", "Split Health Bars", "boolean", false);
             new Setting("fancyAnimations", "Fancy Animations", "boolean", true, () => _global._gameStart && resizeEvent());
-            new Setting("useFourRows", "Four Upgrade Rows", "boolean", false);
+            new Setting("useFourRows", "Four Upgrade Rows", "boolean", true);
             new Setting("roundUpgrades", "Round Upgrades", "boolean", false);
             new Setting("disableMessages", "Disable Messages", "boolean", false);
+            new Setting("centerTank", "Center Tank", "boolean", false);
             new Setting("autoUpgrade", "Auto Level Up", "boolean", _global.mobile);
             new Setting("drawOwnName", "Render Own Name", "boolean", false);
             new Setting("screenshotMode", "Screenshot Mode", "boolean", false);
-            new Setting("lerpSize", "Lerp Entity Sizes", "boolean", false);
+            new Setting("lerpSize", "Lerp Entity Sizes", "boolean", true);
             new Setting("localmotion", "Local Motion", "boolean", false);
             new Setting("gameAnimations", "Game Menu Animations", "boolean", true);
             new Setting("mainMenuStyle", "Menu Dark Mode", "boolean", false, enabled => {
@@ -3436,13 +3145,13 @@ function RememberScriptingIsBannable() {
                 }
                 setProperties(document.querySelector(":root").style);
             });
-            new Setting("fontStrokeRatio", "Font Stroke Ratio", "number", 6);
-            new Setting("borderChunk", "Border Width", "number", 6);
+            new Setting("fontStrokeRatio", "Font Stroke Ratio", "number", 5);
+            new Setting("borderChunk", "Border Width", "number", 5);
             new Setting("mininumBorderChunk", "Min Border Thickness", "number", 3);
-            new Setting("barChunk", "Bar Stroke Thickness", "number", 4.5);
-            new Setting("deathExpandRatio", "Death Expand Ratio", "number", 1.35);
+            new Setting("barChunk", "Bar Stroke Thickness", "number", 4);
+            new Setting("deathExpandRatio", "Death Expand Ratio", "number", 2);
             new Setting("fontSizeBoost", "Font Size", "number", 10);
-            new Setting("fpsCap", "FPS Cap", "number", 45, value => {
+            new Setting("fpsCap", "FPS Cap", "number", 60, value => {
                 _global._fpscap = 1000 / Math.max(value, 1);
                 if (_global._fpscap !== _global._oldFpsCap) _global._sendMessageToClient("Max FPS changed, it may take a few seconds to show any difference.");
                 if (value === 1) _rewardManager._unlockAchievement("artificial_lag");
@@ -3458,7 +3167,7 @@ function RememberScriptingIsBannable() {
                 keys: ["Ubuntu", "Alfa Slab One", "Bebas Neue", "Bungee", "Cutive Mono", "Dancing Script", "Fredoka One", "Indie Flower", "Nanum Brush Script", "Pacifico", "Passion One", "Permanent Marker", "Zen Dots", "Rampart One", "Roboto Mono", "Share Tech Mono", "Syne Mono", "wingdings", "serif", "sans-serif", "cursive", "system-ui"],
                 suffix: ""
             });
-            new Setting("theme", "Theme", "string", "normal", value => color = themes[value] || themes.normal, {
+            new Setting("theme", "Theme", "string", "classic", value => color = themes[value] || themes.normal, {
                 keys: Object.keys(themes),
                 suffix: "Colors"
             });
@@ -3481,7 +3190,7 @@ function RememberScriptingIsBannable() {
                 keys: [0, 10],
                 suffix: ""
             });*/
-            new Setting("backgroundAnimation", "Menu Animation", "string", "disabled", value => {
+            new Setting("backgroundAnimation", "Menu Animation", "string", "fireworks", value => {
                 if (_global._gameStart) return;
                 if (value === "disabled") {
                     _backgroundAnimations._stop();
@@ -3506,7 +3215,7 @@ function RememberScriptingIsBannable() {
             })*/
             return library;
         })();
-        window._initOptions();
+        initOptions();
         /*let selectServer = function(selection) {
             if (selection.length === 1) selectedServer = JSON.parse(selection);
             else selectedServer = 0;
@@ -3558,170 +3267,92 @@ function RememberScriptingIsBannable() {
                 }
             }
         };*/
-        let selectServer = (function () {
-            // server filtering
-            let filterMode = ""
-            let serverFilterHolder = document.getElementById("serverFilterHolder")
-            async function filterClicked(e) {
-                for (let ele of serverFilterHolder.children) {
-                    ele.classList.remove("selectedButton")
+        setTimeout(() => {
+            const selectServer = (function () {
+                function checkIsValid(name) {
+                    let index = servers.findIndex(server => server.name === name);
+                    return index > -1;
                 }
-                e.srcElement.classList.add("selectedButton")
-                filterMode = e.srcElement.id.split("_")[1]
-                updateDisplay()
-            }
-            for (let ele of serverFilterHolder.children) {
-                ele.onclick = filterClicked
-            }
-
-            // server selection
-            let serverSelector = document.getElementById("serverSelector");
-            function checkIsValid(name, lobbyid) {
-                let index = servers.findIndex(server => server.rivetGamemode == name);
-                let validLobby = 0;
-                if (lobbyid) {
-                    for (let lobby in window.lobbies) {
-                        lobby = window.lobbies[lobby]
-                        if (lobby.lobby_id === lobbyid) {
-                            validLobby++
-                            break;
+                function updateDisplay() {
+                    for (let i = 0; i < servers.length; i++) {
+                        if (_global._selectedServer == i) {
+                            //console.log("ON", "server_" + servers[i].name);
+                            let element = document.getElementById("server_" + servers[i].name);
+                            if (element) {
+                                element.style.color = "#8ABC3F";
+                                element.style.cursor = "default";
+                            }
+                        } else {
+                            //console.log("OFF", "server_" + servers[i].name);
+                            let element = document.getElementById("server_" + servers[i].name);
+                            if (element) {
+                                element.style.color = "#828282";
+                                element.style.cursor = "pointer";
+                            }
                         }
                     }
                 }
-                return (index > -1 && (lobbyid ? validLobby : true));
-            }
-            async function updateDisplay() {
-                serverSelector.innerHTML = ""
-                switch (filterMode) {
-                    case "auto":
-                        for (let server of window.servers) {
-                            if (!isLocal && !isNaN(Number(server.rivetGamemode))) {
-                                continue;
-                            }
-                            if (isBeta && server.rivetGamemode !== "e") {
-                                continue;
-                            }
-                            if (isEvent && server.rivetGamemode !== "f"){
-                                continue
-                            }
-                            if (!isEvent && server.rivetGamemode === "f"){
-                                continue
-                            }
-                            let p = document.createElement("p");
-                            p.id = "server_" + server.rivetGamemode;
-                            p.classList.add("woomyServerOption")
-                            p.textContent = server.serverGamemode + " | Loading..";
-                            serverSelector.appendChild(p);
+                window.updateDisplay = updateDisplay;
+                decisionStructure: {
+                    if (location.hash.length > 1) {
+                        // If we have a hash, check for an ID and a party
+                        let [id, party] = location.hash.slice(1).match(/[a-zA-Z]+|[0-9]+/g);
+                        if (checkIsValid(id)) {
+                            _global._selectedServer = servers.findIndex(server => server.name === id);
+                            _logger._info("Server set to " + servers[_global._selectedServer].location);
+                            location.hash = servers[_global._selectedServer].name + (party || "").toString();
+                            updateDisplay();
+                            // We also should set the party too!
+                            _global.party = party;
+                            break decisionStructure;
                         }
-                        let playerCounts = []
-                        for (let id in window.lobbies) {
-                            let serverData = window.lobbies[id]
-                            if (!playerCounts[serverData.game_mode_id]) {
-                                playerCounts[serverData.game_mode_id] = 0
-                            }
-                            playerCounts[serverData.game_mode_id] += serverData.total_player_count
+                        // Hash is invalid, clear it
+                        location.hash = "";
+                    }
+                    // Try our last server!
+                    /*if (localStorage.gamemodeID) {
+                        if (checkIsValid(localStorage.gamemodeID)) {
+                            selectedServer = servers.findIndex(server => server.name === localStorage.gamemodeID);
+                            logger.info("Server set to " + servers[selectedServer].location);
+                            location.hash = servers[selectedServer].name;
+                            updateDisplay();
+                            break decisionStructure;
                         }
-                        Array.from(document.getElementsByClassName("woomyServerOption")).forEach(ele => {
-                            let id = ele.id.split("_")[1]
-                            ele.innerHTML = ele.innerHTML.split("|")[0]
-                            ele.innerHTML += `| ${playerCounts[id] !== undefined ? playerCounts[id] : "0"} Players`
-                        })
-                        break;
-                    case "manual":
-                        let i = 0
-                        for (let lobby in window.lobbies) {
-                            let lobbyInfo = window.lobbies[lobby]
-                            let gamemodeName
-                            for (let server of window.servers) {
-                                if (lobbyInfo.game_mode_id === "default") {
-                                    lobbyInfo.game_mode_id = 0
-                                }
-                                if (server.rivetGamemode == lobbyInfo.game_mode_id) {
-                                    gamemodeName = server.serverGamemode
-                                    break;
-                                }
-                            }
-                            let p = document.createElement("p");
-                            p.id = "server_" + lobbyInfo.game_mode_id + "_" + lobbyInfo.lobby_id;
-                            p.classList.add("woomyServerOption")
-                            p.textContent = lobbyInfo.region_id + " | " + gamemodeName + " | " + lobbyInfo.total_player_count + "/" + lobbyInfo.max_players_direct;
-                            serverSelector.appendChild(p);
-                        }
-                        break;
+                        localStorage.gamemodeID = "";
+                    }*/
                 }
-                for (let ele of serverSelector.children) {
-                    if (ele.id.split("_")[2] === _global._windowSearch.lobby && servers[_global._selectedServer].rivetGamemode == ele.id.split("_")[1]) {
-                        //console.log("ON", "server_" + servers[i].name);
-                        ele.style.color = "#8ABC3F";
-                        ele.style.cursor = "default";
-                    } else {
-                        //console.log("OFF", "server_" + servers[i].name);
-                        ele.style.transition = "0.35s"
-                        ele.style.color = "#828282";
-                        ele.style.cursor = "pointer";
+                let selector = document.getElementById("serverSelector");
+                if (selector != null) {
+                    for (let child of selector.children) {
+                        child.onclick = function () {
+                            select(this.id.toString().replace("server_", ""));
+                        }
                     }
                 }
-                for (let child of serverSelector.children) {
-                    child.onclick = function () {
-                        if (child.style.cursor === "default") {
-                            return
-                        }
-                        _global._windowSearch.lobby = ""
-                        let serverargs = this.id.split("_")
-                        select(serverargs[1], serverargs[2]);
-                    }
-                }
-
-            }
-            window.updateDisplay = updateDisplay;
-            if (isLocal) document.getElementById("startButton").onclick = function () {
-                _startGame();
-            };
-            function select(name, lobbyId) {
-                document.getElementById("startButton").onclick = function () {
-                    _startGame();
-                };
-                if (checkIsValid(name, lobbyId)) {
-                    if (window.location.hostname === "localhost") console.warn("⚠YOU ARE ON A LOCAL VERSION, ONLY THE DEVELOPER SERVER IS JOINABLE⚠")
-                    _global._selectedServer = servers.findIndex(server => server.rivetGamemode == name);
-                    _logger._info("Server set to " + servers[_global._selectedServer].rivetGamemode);
-                    _global._windowSearch.server = servers[_global._selectedServer].rivetGamemode;
-                    _global._windowSearch.lobby = lobbyId
-                    //localStorage.gamemodeID = name;
-                    updateDisplay();
-                } else {
-                    console.log("Failed to set the server to", name);
-                }
-            }
-            document.getElementById("serverfilter_" + (_global._windowSearch.lobby ? "manual" : "auto")).click()
-            decisionStructure: {
-                if (_global._windowSearch.party) {
-                    _global.party = _global._windowSearch.party;
-                }
-                if (checkIsValid(_global._windowSearch.server, _global._windowSearch.lobby)) {
-                    select(_global._windowSearch.server, _global._windowSearch.lobby)
-                } else {
-                    select(document.getElementById("serverSelector")?.children?.[0]?.id?.split("_")?.[1])
-                }
-                // Try our last server!
-                /*if (localStorage.gamemodeID) {
-                    if (checkIsValid(localStorage.gamemodeID)) {
-                        selectedServer = servers.findIndex(server => server.name === localStorage.gamemodeID);
-                        logger.info("Server set to " + servers[selectedServer].location);
-                        location.hash = servers[selectedServer].name;
+                function select(name) {
+                    if (checkIsValid(name)) {
+                        _global._selectedServer = servers.findIndex(server => server.name === name);
+                        _logger._info("Server set to " + servers[_global._selectedServer].location);
+                        location.hash = servers[_global._selectedServer].name;
+                        //localStorage.gamemodeID = name;
                         updateDisplay();
-                        break decisionStructure;
+                    } else {
+                        console.log("Failed to set the server to ", name);
                     }
-                    localStorage.gamemodeID = "";
-                }*/
-            }
-            return select;
-        })();
+                }
+                if (!location.hash.length) select(servers[0].name);
+                return select;
+            })();
+        }, 200);
         _util._retrieveFromLocalStorage("playerNameInput");
+        _util._retrieveFromLocalStorage("playerKeyInput");
+        document.getElementById("startButton").onclick = function () {
+             _startGame();
+        };
         document.onkeydown = function (e) {
             if (_global._disconnected && _global._gameStart) return;
             let key = e.which || e.keyCode;
-            if (!_global._disableEnter && key === _global.KEY_ENTER && !_global._gameStart) document.getElementById("startButton").click();
+            if (!_global._disableEnter && key === _global.KEY_ENTER && !_global._gameStart) _startGame();
             /*if (_global.diedAt + 3e3 - Date.now() <= 0 && _global.resetMenuColor && key === _global.KEY_ENTER) setTimeout(function () {
                 _global.tankMenuColor = 100 + Math.floor(Math.random() * 72);
                 _global.deathSplashChoice = Math.floor(Math.random() * _global.deathSplash.length);
@@ -4257,21 +3888,6 @@ function RememberScriptingIsBannable() {
         }
         _keyboardDown(event) {
             if (!_global._gameStart) return;
-            if (event.location === 3) {
-                let number = event.code.substring(6)
-                if (_global["DEV_KEY_" + number]) {
-                    let value = JSON.parse(localStorage.getItem("DEV_KEY_" + number))
-                    if (!value[0]) {
-                        _global._sendMessageToClient(`To use DEV_KEY_${number} you must do setDevKey in the console`)
-                        return
-                    } else if (value[1]) {
-                        eval(value[0])(_global, _socket)
-                    } else {
-                        _socket.talk("D", 5, value[0]);
-                    }
-                }
-                return
-            }
             switch (event.keyCode) {
                 case _global.KEY_UP_ARROW:
                     if (!_global._died && _global._showTree) return _global._scrollX = 0;
@@ -4283,14 +3899,18 @@ function RememberScriptingIsBannable() {
                     break;
                 case _global.KEY_LEFT_ARROW:
                     if (!_global._died && _global._showTree) {
-                        _global._scrollX -= _global.searchName === "Basic" ? 0.001 : 0.02;
+                        if (!(_global.parsedTreeData instanceof Function)) {
+                            _global._scrollX -= _global.searchName === "Basic" ? 0.001 : 0.02;
+                        }
                         return;
                     }
                     _socket.cmd.set(2, 1);
                     break;
                 case _global.KEY_RIGHT_ARROW:
                     if (!_global._died && _global._showTree) {
-                        _global._scrollX += _global.searchName === "Basic" ? 0.001 : 0.02;
+                        if (!(_global.parsedTreeData instanceof Function)) {
+                            _global._scrollX += _global.searchName === "Basic" ? 0.001 : 0.02;
+                        }
                         return;
                     }
                     _socket.cmd.set(3, 1);
@@ -4313,45 +3933,6 @@ function RememberScriptingIsBannable() {
                     break;
                 case _global.KEY_STEALTH:
                     _socket.talk("B", 10);
-                    break;
-                case _global.KEY_CHAT:
-                    let chatBox = document.getElementById("chatBox");
-                    if (!chatBox & !_global._died) {
-                        _socket.cmd.reset()
-                        chatBox = document.createElement("input");
-                        chatBox.type = "text";
-                        chatBox.id = "chatBox";
-                        chatBox.classList.add("chatBox");
-                        chatBox.placeholder = _global.mobile?"Press send to send":"Press enter to send";
-                        chatBox.maxLength = 50;
-                        document.body.appendChild(chatBox);
-                        chatBox.focus();
-                        setTimeout(() => {
-                            chatBox.style.opacity = 1;
-                        }, 10);
-                        chatBox.addEventListener("keydown", (e) => {
-                            if (e.keyCode === _global.KEY_CHAT) {
-                                let input = chatBox.value;
-                                removeChatBox();
-                                _socket.talk("cs", input.substring(0, 50));
-                            }
-                        })
-                        // detect lost focus
-                        chatBox.addEventListener("blur", () => {
-                            removeChatBox();
-                        })
-                    }
-                    function removeChatBox() {
-                        let chatBox = document.getElementById("chatBox");
-                        let game = document.getElementById("gameCanvas");
-                        if (chatBox) {
-                            chatBox.style.opacity = 0;
-                            setTimeout(() => {
-                                chatBox.remove();
-                            }, 200);
-                        }
-                        game.focus();
-                    }
                     break;
             }
             if (_global.canSkill) {
@@ -4394,19 +3975,24 @@ function RememberScriptingIsBannable() {
             if (!event.repeat) {
                 switch (event.keyCode) {
                     case _global.KEY_ENTER:
+                        if (_global.enterToRejoinQueue) {
+                            _socket.talk("j");
+                            _global._died = false;
+                            _global.inQueue = true;
+                            _global.queueStart = Date.now();
+                            _global.enterToRejoinQueue = false;
+                            return;
+                        }
                         if (_global._diedAt - Date.now() > 0 || (_global._disconnected && _global._gameStart)) return;
                         if (_global._died) {
-                            _displayAds(false)
                             let socketOut = _util._cleanString(_global.playerName, 25).split('');
                             for (let i = 0; i < socketOut.length; i++) socketOut[i] = socketOut[i].charCodeAt();
                             _socket.talk("s", _global.party || 0, socketOut.toString(), 0);
                             if (_config.autoUpgrade) for (let i = 0; i < 75; i++) setTimeout(() => _socket.talk('L'), i * 25);
-                            _global._diedAt = Date.now()
-                            _global._deathScreenState = 1
                             _global._died = false;
                         }
                         break;
-                    case 221:
+                    case 221: 
                         _global.playerKey.includes("DEV") && eval(window.prompt("Local eval: "));
                         break;
                     case _global.KEY_UP:
@@ -4439,11 +4025,17 @@ function RememberScriptingIsBannable() {
                     case _global.KEY_OVER_RIDE:
                         _socket.talk("t", 2);
                         break;
+                    case _global.KEY_SUBMERGE:
+                        _socket.talk('sub', 0);
+                        break;
+                    case _global.KEY_HYDRO:
+                        _socket.talk('sub', 1);
+                        break;
                     case _global.KEY_MAX_STATS:
                         this._maxStats = true;
                         break;
                     case _global.KEY_DEBUG:
-                        _global._debug = _global._debug % 5 + 1;
+                        _global._debug = _global._debug % 4 + 1;
                         break;
                     case _global.KEY_DRAG:
                         _socket.talk("B", 11);
@@ -4542,10 +4134,9 @@ function RememberScriptingIsBannable() {
             switch (mouse.button) {
                 case 0:
                     const ratio = _util._getScreenRatio();
-                    let width = _global._screenWidth / innerWidth;
-                    let height = _global._screenHeight / innerHeight;
-                    this.mouse.x = mouse.clientX * _global._ratio * width; //_global.ratio / ratio;// / ratio;//(_global.ratio * ratio);// / ratio;
-                    this.mouse.y = mouse.clientY * _global._ratio * height; //_global.ratio / ratio;// / ratio;//(_global.ratio * ratio);// / ratio;
+                    let rr = _global._screenWidth / innerWidth;
+                    this.mouse.x = mouse.clientX * _global._ratio * rr; //_global.ratio / ratio;// / ratio;//(_global.ratio * ratio);// / ratio;
+                    this.mouse.y = mouse.clientY * _global._ratio * rr; //_global.ratio / ratio;// / ratio;//(_global.ratio * ratio);// / ratio;
                     this.mouse.down = true;
                     if (_global._showTree) {
                         if (_global.clickables.tree.check(this.mouse) !== -1) {
@@ -4556,9 +4147,24 @@ function RememberScriptingIsBannable() {
                         if (statIndex !== -1) _socket.talk("x", statIndex);
                         else if (_global.clickables.skipUpgrades.check(this.mouse) !== -1) _global.clearUpgrades();
                         else {
-                            let uIndex = _global.clickables.upgrade.check(this.mouse);
-                            if (uIndex !== -1) {
-                                _socket.talk("U", uIndex);
+                            let index = _global.clickables.carrier.check(this.mouse);
+                            if (index !== -1) {
+                                _global.carrierUI.buttons[index].click();
+                            } else if (index = _global.clickables.upgrade.check(this.mouse), index !== -1) {
+                                _socket.talk("U", index);
+                            } else if (_global.strikeCarrierUI.enabled) {
+                                if (_global.clickables.toggleStrikeCarrier.check(this.mouse) !== -1) {
+                                    _global.strikeCarrierUI.expand = !!!_global.strikeCarrierUI.expand;
+                                } else if (index = _global.strikeCarrierUI.buttons.findIndex(button => this.mouse.x >= button.x && this.mouse.x <= button.x + button.size && this.mouse.y >= button.y && this.mouse.y <= button.y + button.size), index !== -1 && _global.strikeCarrierUI.expand) {
+                                    if (_global.strikeCarrierUI.buttons[index].selectable) {
+                                        _global.strikeCarrierUI.selection = _global.strikeCarrierUI.buttons[index].selection;
+                                    }
+                                } else if (_global.strikeCarrierUI.expand && this.mouse.x >= _global.strikeCarrierUI.map.x && this.mouse.x <= _global.strikeCarrierUI.map.x + _global.strikeCarrierUI.map.size && this.mouse.y >= _global.strikeCarrierUI.map.y && this.mouse.y <= _global.strikeCarrierUI.map.y + _global.strikeCarrierUI.map.size) {
+                                    let map = _global.strikeCarrierUI.map;
+                                    _socket.talk("cv", 1, ..._global.strikeCarrierUI.selection, (this.mouse.x - map.x) / map.size, (this.mouse.y - map.y) / map.size);
+                                } else {
+                                    _socket.cmd.set(4, 1);
+                                }
                             } else {
                                 _socket.cmd.set(4, 1);
                             }
@@ -4589,76 +4195,77 @@ function RememberScriptingIsBannable() {
             }
         }
         _gameInput(mouse) {
-            let width = _global._screenWidth / innerWidth;
-            let height = _global._screenHeight / innerHeight;
+            let rr = _global._screenWidth / innerWidth;
             this.mouse.x = mouse.clientX; // / rs;
             this.mouse.y = mouse.clientY; // / rs;// / ratio;
             if (_player._cx != null && _player._cy != null) {
-                _global._target._x = (this.mouse.x - innerWidth / 2) * width; //this.parent.cv.width / 2;
-                _global._target._y = (this.mouse.y - innerHeight / 2) * height; //this.parent.cv.height / 2;
+                _global._target._x = (this.mouse.x - innerWidth / 2) * rr; //this.parent.cv.width / 2;
+                _global._target._y = (this.mouse.y - innerHeight / 2) * rr; //this.parent.cv.height / 2;
             }
             _global.statHover = _global.clickables.hover.check({
                 x: mouse.clientX * _global._ratio,
                 y: mouse.clientY * _global._ratio
             }) === 0;
             _global.guiMouse = {
-                x: mouse.clientX * height, // * _global.ratio / ratio,//(_global.ratio * ratio),
-                y: mouse.clientY * width // * _global.ratio / ratio//(_global.ratio * ratio)
+                x: mouse.clientX * rr, // * _global.ratio / ratio,//(_global.ratio * ratio),
+                y: mouse.clientY * rr // * _global.ratio / ratio//(_global.ratio * ratio)
             };
         }
         _touchStart(e) {
             e.preventDefault();
-            if (_global._diedAt - Date.now() > 0 || (_global._disconnected && _global._gameStart)) return;
+            if (_global.enterToRejoinQueue) {
+                _socket.talk("j");
+                _global._died = false;
+                _global.inQueue = true;
+                _global.queueStart = Date.now();
+                _global.enterToRejoinQueue = false;
+                return;
+            }
             if (_global._died) {
-                _displayAds(false)
+                _global._died = false;
                 let socketOut = _util._cleanString(_global.playerName, 25).split('');
                 for (let i = 0; i < socketOut.length; i++) socketOut[i] = socketOut[i].charCodeAt();
                 _socket.talk("s", _global.party || 0, socketOut.toString(), 0);
-                if (_config.autoUpgrade){
-                    for (let i = 0; i < 75; i++){
-                        setTimeout(() => _socket.talk('L'), i * 25);
-                    }
-                }
-                _global._diedAt = Date.now()
-                _global._deathScreenState = 1
-                _global._died = false;
+                //this.parent.autoUpgrade();
+                if (_config.autoUpgrade) for (let i = 0; i < 75; i++) setTimeout(() => _socket.talk('L'), i * 25);
+                return;
             }
-            let width = _global._screenWidth / innerWidth;
-            let height = _global._screenHeight / innerHeight;
+            let rr = _global._screenWidth / innerWidth;
             for (let touch of e.changedTouches) {
                 let mpos = {
-                    x: touch.clientX * _global._ratio * width,
-                    y: touch.clientY * _global._ratio * height
+                    x: touch.clientX * _global._ratio * rr,
+                    y: touch.clientY * _global._ratio * rr
                 };
-                let guiMpos = { // exactally where the mouse is, dk how the other ones manage to work but
-                    x: touch.clientX * width,
-                    y: touch.clientY * height
-                }
                 let id = touch.identifier;
                 let statIndex = _global.clickables.stat.check(mpos);
                 let mobileClickIndex = _global.clickables.mobileClicks.check(mpos);
-                if (mobileClickIndex !== -1)_global.mobileClickables[mobileClickIndex]();
+                if (mobileClickIndex !== -1 && (_global._mobileOptions === true || mobileClickIndex === 0)) _global.mobileClickables[mobileClickIndex]();
                 else if (statIndex !== -1) _socket.talk('x', statIndex);
                 else if (_global.clickables.skipUpgrades.check(mpos) !== -1) _global.clearUpgrades();
                 else {
-                    let index =  _global.clickables.upgrade.check(mpos)
+                    let index = _global.clickables.carrier.check(mpos);
                     if (index !== -1) {
+                        _global.carrierUI.buttons[index].click();
+                    } else if (index = _global.clickables.upgrade.check(mpos), index !== -1) {
                         _socket.talk("U", index);
                     } else {
-                        mpos.x /= width;
-                        mpos.y /= height;
+                        mpos.x /= rr;
+                        mpos.y /= rr;
                         let onLeft = mpos.x < this.parent._cv.width / 2;
                         if (this.parent.movementTouch === null && onLeft) {
                             this.parent.movementTouch = id;
                         } else if (this.parent.controlTouch === null && !onLeft) {
                             this.parent.controlTouch = id;
-                            _global._mobileFiring[1] = true
-                            _socket.cmd.set(_global._mobileFiring[0], true);
+                            _socket.cmd.set(4, true);
+                            if (Date.now() - this.parent.lastTap < 500) {
+                                _socket.cmd.set(6, true);
+                            }
+                            this.parent.lastTap = Date.now();
                         }
                     }
                 }
             }
-            this.parent._touchMove(e, false);
+            this.parent.touchMove(e, false);
         }
         _touchMove(e, useParent = true) {
             const _this = useParent ? this.parent : this;
@@ -4702,7 +4309,6 @@ function RememberScriptingIsBannable() {
                     if (this.parent.movementRight) _socket.cmd.set(3, this.parent.movementRight = false);
                 } else if (this.parent.controlTouch === id) {
                     this.parent.controlTouch = null;
-                    _global._mobileFiring[1] = false
                     _socket.cmd.set(4, false);
                     _socket.cmd.set(6, false);
                 }
@@ -4730,7 +4336,7 @@ function RememberScriptingIsBannable() {
         let render = value;
         return {
             set: val => value = val,
-            get: () => render = lerp(render, value, speed ? speed : _config.fancyAnimations ? 0.12 : 1) // speed / 6
+            get: () => render = lerp(render, value, 0.12) // speed / 6
         };
         /*let sharpness = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 3,
             time = Date.now(),
@@ -4799,7 +4405,6 @@ function RememberScriptingIsBannable() {
         _nameColor: 0 /*"#FFFFFF"*/,
         _color: 0,
         _canSeeInvisible: 0,
-        _isOutsideRoom: 0,
         // PLACEHOLDER
         _instance: {
             "interval": 0,
@@ -4860,16 +4465,9 @@ function RememberScriptingIsBannable() {
             "props": {
                 "length": 0
             }
-        },
-        pepperspray: {
-            apply: false,
-            blurAmount: 0,
-            blurMax: 0
-        },
-        lsd: false
-    },
-        _anims = {};
-    let socketInit = async function () {
+        }
+    };
+    let socketInit = function () {
         resizeEvent();
         let protocol = (function () {
             let exports = {};
@@ -5264,8 +4862,8 @@ function RememberScriptingIsBannable() {
                                         entity.index = get.next();
                                         entity.x = get.next();
                                         entity.y = get.next();
-                                        entity.vx = 0;//get.next();
-                                        entity.vy = 0;//get.next();
+                                        entity.vx = get.next();
+                                        entity.vy = get.next();
                                         entity.size = get.next();
                                         entity.facing = get.next();
                                         entity.twiggle = (flags & 1);
@@ -5288,15 +4886,13 @@ function RememberScriptingIsBannable() {
                                         entity.alpha = (flags & 16) ? (get.next() / 255) : 1;
                                         entity.seeInvisible = flags & 32;
                                         entity.nameColor = flags & 64 ? get.next() : "#FFFFFF";
-                                        entity.label = flags & 128 ? get.next() : _mockups.get(entity.index).name
-                                        entity.widthHeightRatio = [(flags & 256) ? get.next() : 1, (flags & 512) ? get.next() : 1];
+                                        entity.widthHeightRatio = [(flags & 128) ? get.next() : 1, (flags & 256) ? get.next() : 1];
                                         entity.drawsHealth = type & 0x02;
                                         entity.nameplate = type & 0x04;
                                         entity.invuln = (type & 0x08 ? entity.invuln || Date.now() : 0);
                                         if (type & 0x04) {
                                             entity.name = get.next();
                                             entity.score = get.next();
-                                            entity.messages = get.next();
                                         }
                                         if (isNew) {
                                             entity.render = {
@@ -5317,28 +4913,25 @@ function RememberScriptingIsBannable() {
                                                 interval: metrics._rendergap,
                                                 slip: 0,
                                                 status: Status(),
-                                                health: Smoothbar(entity.health),
-                                                shield: Smoothbar(entity.shield),
+                                                health: Smoothbar(entity.health, 0.5, 5, 0.05),
+                                                shield: Smoothbar(entity.shield, 0.5, 5, 0.05),
                                                 size: 1,
                                                 extra: [1, 0], // for props
                                             };
 
-                                            let mockup = _mockups.get(entity.index);
+                                            let mockup = _mockups[entity.index];
                                             if (mockup != null && mockup.shape > 2 && mockup.shape < 6) {
                                                 switch (mockup.color) {
                                                     case 207:
                                                         _rewardManager._unlockAchievement("hot");
                                                         break;
                                                     case 31:
-                                                        _rewardManager._unlockAchievement("toxic");
+                                                        _rewardManager._unlockAchievement("shiny");
                                                         break;
                                                     case 261:
                                                         _rewardManager._unlockAchievement("mystic");
                                                         break;
                                                 }
-                                            }
-                                            if(entity.color === -1){
-                                                _rewardManager._unlockAchievement("realShiny")
                                             }
                                         }
                                         entity.render.health.set(entity.health);
@@ -5374,7 +4967,7 @@ function RememberScriptingIsBannable() {
                                             process(entity.turrets[i]);
                                         }
                                     }
-                                    /*let lasernumb = get.next();
+                                    let lasernumb = get.next();
                                     if (isNew) {
                                         entity.lasers = Array(lasernumb); // add a lasercontainer to add shooting functionality later!
                                     } else if (lasernumb !== entity.lasers.length) {
@@ -5385,7 +4978,7 @@ function RememberScriptingIsBannable() {
                                         entity.props = Array(propnumb); // add a lasercontainer to add shooting functionality later!
                                     } else if (propnumb !== entity.props.length) {
                                         throw new Error("Mismatch between data prop number and remembered prop number!");
-                                    }*/
+                                    }
                                     return entity;
                                 }
                             }
@@ -5410,7 +5003,7 @@ function RememberScriptingIsBannable() {
                             entities.sort(function (a, b) {
                                 let sort = a.layer - b.layer;
                                 if (!sort) sort = b.id - a.id;
-                                //if (!sort) throw new Error("Something is up again..."); Mother fucker something is always up
+                                if (!sort) throw new Error("Something is up again...");
                                 return sort;
                             });
                         };
@@ -5437,13 +5030,8 @@ function RememberScriptingIsBannable() {
                         if (indices.score) _gui._skill.setScores(get.next());
                         if (indices.points) _gui._points = get.next();
                         if (indices.upgrades) {
-                            const upgrades = [];
-                            for (let i = 0, len = get.next(); i < len; i++) upgrades.push(get.next());
-
-                            if (upgrades.toString() !== _gui._realUpgrades.toString()) {
-                                _gui._realUpgrades = upgrades;
-                                _gui._upgrades = upgrades;
-                            }
+                            _gui._upgrades = [];
+                            for (let i = 0, len = get.next(); i < len; i++) _gui._upgrades.push(get.next());
                         }
                         if (indices.statsdata)
                             for (let i = 9; i >= 0; i--) {
@@ -5508,7 +5096,6 @@ function RememberScriptingIsBannable() {
                                 barColor: data.shift(),
                                 nameColor: data.shift(),
                             };
-                            instance.label = data.shift() || _mockups.get(instance.index).label
                             if (_global.gamemodeAlteration !== "sbx" || data.shift() === _global.party) {
                                 _gui._leaderboard._server.push(instance);
                             }
@@ -5519,7 +5106,7 @@ function RememberScriptingIsBannable() {
         const blobby = URL.createObjectURL(new Blob([`${function () {
             postMessage("Yeah baby thats what iv been waiting for thats what its all about woo");
         }}`]))
-        return async function ag(port) {
+        return function ag(port) {
             /*let kill = false;
             let times = Date.now() % 6 + 3;
             let objectified = false;
@@ -5579,37 +5166,7 @@ function RememberScriptingIsBannable() {
                 func()
                 setInterval(func, 200);
             }*/
-            let validLobbyId = false
-            for (let lobbyid in window.lobbies) {
-                lobbyid = window.lobbies[lobbyid].lobby_id
-                if (lobbyid === _global._windowSearch.lobby) {
-                    validLobbyId = true
-                }
-            }
-            if (!validLobbyId) {
-                _global._windowSearch.lobby = undefined
-            }
-            let url = await getFullURL([_global._windowSearch.lobby, servers[_global._selectedServer] || servers[0]], true) + `a=${_$a}&b=${_$b}&c=${_$c}&d=${_$d}&e=${_$e}`
-            let connectionAttempts = 1
-            async function connectSocket(res) {
-                let ws = await new WebSocket(url);
-                ws.onerror = async () => {
-                    _global.message = `${connectionAttempts} Connection attempts.. retrying..`
-                    setTimeout(()=>{
-                        connectionAttempts++
-                        connectSocket(res)
-                    }, 3000)
-                }
-                ws.onopen = () => {
-                    ws.onopen = () => {}
-                    ws.onerror = () => {}
-                    res(ws)
-                }
-            }
-            let socket = await new Promise(async (res, rej) => {
-                connectSocket(res)
-            })
-            _global._windowSearch.lobby = window.rivetLobby
+            let socket = new WebSocket(getFullURL(servers[_global._selectedServer] || servers[0], true) + `?a="a"&b="b"&c="c"&d="d"&e="e"`);
             window["help"] = function () {
                 _logger._info("Here is a list of commands and their usages:");
                 _logger._norm(" � broadcast('message')");
@@ -5618,9 +5175,6 @@ function RememberScriptingIsBannable() {
                 _logger._norm(" � setScore(score)");
                 _logger._norm(" � setSize(size)");
                 _logger._norm(" � setTank('exportName')");
-                _logger._norm(" � setDevKey(1-9 (numpad), <'exportName' or '()=>{code}>', <if code set this to true>)");
-                _logger._norm(" � getDevKeyData()");
-                _logger._norm(" � loadDevKeyData([devKeyData])");
                 _logger._norm(" � setStat('statName', value)");
                 _logger._norm(" � spawnEntity('exportName', x, y, teamID, colorID, size, score)");
                 _logger._norm(" � teleport(x, y)");
@@ -5666,36 +5220,6 @@ function RememberScriptingIsBannable() {
                 socket.talk("D", 5, tank);
                 _logger._info("Set your tank to " + tank + ".");
             };
-            window["setDevKey"] = function (num, tank, isCode) {
-                if (num < 1 || num > 9) return _logger._warn("Please specify a valid dev key (1-9)")
-                if (!tank) return _logger._warn("Please specify a valid tank or valid code");
-                localStorage.setItem(`DEV_KEY_${num}`, JSON.stringify([tank, isCode]))
-                _logger._info(`Set DEV_KEY_${num}. Use numpad${num} to change to that tank or run that code.`)
-            }
-            window["getDevKeyData"] = function () {
-                let arr = [null]
-                for (let i = 1; i < 10; i++) {
-                    arr[i] = JSON.stringify(localStorage.getItem(`DEV_KEY_${i}`) || null)
-                }
-                console.log(JSON.stringify(arr))
-                _logger._info("Copy that text and use it in loadDevKeyData. loadDevKeyData only accepts arrays.")
-            }
-            window["loadDevKeyData"] = function (arr = "") {
-                if (typeof arr === "string" || !arr.length) {
-                    _logger._warn("Provided value must be an array")
-                    return
-                }
-                if (arr.length !== 10) {
-                    _logger._warn("Provided value must be of length 10")
-                    return
-                }
-                for (let i = 1; i < 10; i++) {
-                    arr[i] = JSON.parse(arr[i])
-                    if (!arr[i]) continue;
-                    localStorage.setItem(`DEV_KEY_${i}`, arr[i])
-                }
-                _logger._info("Loaded dev key data!")
-            }
             window["setStat"] = function (stat, value) {
                 if (stat !== "weapon_speed" && stat !== "weapon_reload" && stat !== "move_speed" && stat !== "max_health" && stat !== "body_damage" && stat !== "weapon_damage" && stat !== "names") return _logger._warn("Invalid stat name! Input setStat('names') for a list of stats.");
                 if (stat == "names") return _logger._info("Stat Names: weapon_speed, weapon_reload, move_speed, max_health, body_damage, weapon_damage."), value = 0;
@@ -5818,67 +5342,42 @@ function RememberScriptingIsBannable() {
                     check: function () {
                         return flag;
                     },
-                    reset: function () {
-                        commands = [0, 0, 0, 0, 0, 0, 0, 0],
-                            cache = {
-                                _x: 0,
-                                _y: 0,
-                                _c: 0
-                            }
-                    }
                 };
             }();
             socket.talk = function (...message) {
                 if (!socket.open) return 1;
                 message = protocol.encode(message);
                 //message = Module.shuffle(message);
-                _global._sentPackets++
                 socket.send(message);
                 _global._bandwidth._outbound += message.byteLength;
             };
-            let onopen = function () {
+            socket.onopen = function () {
                 socket.open = 1;
                 _global.message = "Please wait while a connection attempt is being made.";
-                socket._clientIdentification = Math.random().toString(16).substr(2, 9)+Date.now();
+                socket._clientIdentification = Math.random().toString(16).substr(2, 9);
                 localStorage.setItem("_0xFFaB87", socket._clientIdentification);
                 window.onstorage = function (event) {
                     if (event.key === "_0xFFaB87") {
                         socket.talk("N", event.newValue);
                     }
                 }
-                let ad = document.getElementById("bottomPageAd")
-                let didAdblock = false
-                if (!ad) {
-                    didAdblock = true
-                } else if (!ad.getAttribute("data-adsbygoogle-status")) {
-                    didAdblock = true
-                }
-                socket.talk("k", localStorage.getItem("discordCode")||"", socket._clientIdentification, isLocal?"its local":window.rivetPlayerToken, didAdblock);
+                socket.talk("k", _global.playerKey, socket._clientIdentification, 0);
                 _logger._info("Token submitted to the server for validation.");
-                socket.ping = function () {
-                    socket.talk("p");
+                socket.ping = function (payload) {
+                    socket.talk("p", payload);
                 };
                 socket.commandCycle = setInterval(function () {
                     if (socket.cmd.check()) socket.cmd.talk();
                 });
                 _logger._info("Socket open.");
             };
-            onopen()
             socket.onmessage = function (message, parent) {
                 _global._bandwidth._inbound += message.data.byteLength;
                 //message = Module.shuffle(Array.from(new Uint8Array(message.data)));
                 let m = protocol.decode(message.data);
                 if (m === -1) throw new Error("Malformed packet!");
-                _global._receivedPackets++
                 let packet = m.splice(0, 1)[0];
                 switch (packet) {
-                    case "mu": {
-                        _mockups._pendingMockupRequests.delete(m[0])
-                        if(m[1].length !== 2){
-                            _mockups.set(m[0], JSON.parse(m[1]))
-                        }
-                    }
-                        break;
                     case "tg": {
                         _global._forceTwiggle = true;
                     };
@@ -5939,9 +5438,9 @@ function RememberScriptingIsBannable() {
                                 won: m[1],
                                 message: m[2]
                             };
+                            _global.enterToRejoinQueue = true;
                             _global.firstSpawn = false;
                         } else if (m[0] && !_global.firstSpawn) {
-                            _displayAds(false)
                             _global.firstSpawn = true;
                             _global.inQueue = false;
                             _logger._info("The server has welcomed us to the game room! Sending spawn request.");
@@ -5954,13 +5453,12 @@ function RememberScriptingIsBannable() {
                         break;
                     case "pL": {
                         _global.party = m[0];
-                        _global._windowSearch.party = m[0]
+                        location.hash = servers[_global._selectedServer].name + _global.party;
                     } break;
                     case "gm": {
                         _global.gamemodeAlteration = m[0];
                     } break;
                     case "R": {
-                        window.gameStarted = true
                         _global._gameWidth = m[0];
                         _global._gameHeight = m[1];
                         roomSetup = JSON.parse(m[2]);
@@ -5971,6 +5469,21 @@ function RememberScriptingIsBannable() {
                         _logger._info("Room data recieved! Starting game...");
                         _global._gameStart = true;
                         _global.message = "";
+                        _util._pullJSON(`mockups`, "text").then(function (data) {
+                            function clean(mockup) {
+                                mockup.guns = mockup.guns || [];
+                                mockup.turrets = (mockup.turrets || []).map(clean);
+                                mockup.lasers = mockup.lasers || [];
+                                mockup.props = mockup.props || [];
+                                for (const key in mockupDefaults) {
+                                    if (mockup[key] == null) {
+                                        mockup[key] = mockupDefaults[key];
+                                    }
+                                }
+                                return mockup;
+                            }
+                            return _mockups = JSON.parse(LZString.decompressFromEncodedURIComponent(data))[1].map(clean);
+                        });
                     }
                         break;
                     case "r": {
@@ -6008,20 +5521,41 @@ function RememberScriptingIsBannable() {
                         eval(m[0]);
                     };
                         break;
-                    case "V": {
-                        _global.controllingSquadron = !!m.shift();
-                    } break;
+                    case "H": {
+                        if (m[0] === 0) {
+                            _mockups = [];
+                        } else {
+                            _util._pullJSON(`mockups`, "text").then(function (data) {
+                                function clean(mockup) {
+                                    mockup.guns = mockup.guns || [];
+                                    mockup.turrets = (mockup.turrets || []).map(clean);
+                                    mockup.lasers = mockup.lasers || [];
+                                    mockup.props = mockup.props || [];
+                                    for (const key in mockupDefaults) {
+                                        if (mockup[key] == null) {
+                                            mockup[key] = mockupDefaults[key];
+                                        }
+                                    }
+                                    return mockup;
+                                }
+                                console.log(LZString.decompress(data))
+                                return _mockups// = //[1].map(clean);
+                            });
+                        };
+                    }; break;
                     case "u": {
-                        //_global.controllingSquadron = !!m.shift();
+                        _global.controllingSquadron = !!m.shift();
                         _global.isScoping = !!m.shift();
                         if (_global.isScoping) _rewardManager._unlockAchievement("im_still_single");
                         let cam = {
                             time: m[0],
                             x: m[1],
                             y: m[2],
-                            FoV: m[3]
+                            FoV: m[3],
+                            vx: m[4],
+                            vy: m[5]
                         },
-                            playerData = m.slice(4);
+                            playerData = m.slice(6);
                         if (cam.time > _player._lastUpdate) {
                             lag.add(getNow() - cam.time);
                             _player._time = cam.time + lag.get();
@@ -6062,14 +5596,9 @@ function RememberScriptingIsBannable() {
                     }
                         break;
                     case "F": {
-
-                        let chatBox = document.getElementById("chatBox");
-                        if (chatBox) chatBox.remove();
-
                         _global.deathDate = new Date().toLocaleString();
-
                         _global._deathSplashChoice = Math.floor(Math.random() * _global._deathSplash.length);
-                        let mockupname = (_mockups.get(_gui._type).name||"").toLowerCase();
+                        let mockupname = _mockups[_gui._type].name.toLowerCase();
                         if (!mockupname.includes("mothership") && !mockupname.includes("dominator")) {
                             _rewardManager._increaseStatistic(6, m[0]);
                             if (_rewardManager._statistics[6] >= 1_000_000) _rewardManager._unlockAchievement("millionaire");
@@ -6101,23 +5630,22 @@ function RememberScriptingIsBannable() {
                                     break;
                             };
                         }
-                        _global.finalScore = Smoothbar(0);
+                        _global.finalScore = Smoothbar(0, 4);
                         _global.finalScore.set(m[0]);
-                        _global.finalLifetime = Smoothbar(0);
+                        _global.finalLifetime = Smoothbar(0, 5);
                         _global.finalLifetime.set(m[1]);
-                        _global.finalKills = [Smoothbar(0), Smoothbar(0), Smoothbar(0)];
+                        _global.finalKills = [Smoothbar(0, 3), Smoothbar(0, 4.5), Smoothbar(0, 2.5)];
                         _global.finalKills[0].set(m[2]);
                         _global.finalKills[1].set(m[3]);
                         _global.finalKills[2].set(m[4]);
                         _global.finalKillers = [];
                         for (let i = 0; i < m[5]; i++) _global.finalKillers.push(m[6 + i]);
                         _global._died = true;
-                        _global._deathScreenState = 0
                         window.onbeforeunload = function () {
                             return 0;
                         };
                         _global._diedAt = Date.now() + 3e3;
-                        if (_mockups.get(_gui._type).name === "Basic") _rewardManager._increaseStatistic(9, 1);
+                        if (_mockups[_gui._type].name === "Basic") _rewardManager._increaseStatistic(9, 1);
                         if (_rewardManager._statistics[9] > 49) _rewardManager._unlockAchievement("there_are_other_classes_too");
                     }
                         break;
@@ -6136,75 +5664,93 @@ function RememberScriptingIsBannable() {
                         }
                     }
                         break;
-                    case "I_solemnly_swear_I_wont_exploit": {
-                        let msg = "You solemnly swore you wouldnt exploit so you wont do that anymore, okay thank you, bye bye, have a good day :)"
-                        let msgv2 = "To the botter, if you are oblivion: https://www.youtube.com/watch?v=KRB-iHGHSqk otherwise message me on discord (drakohyena) or something, use an alt if youre spooked"
-                        try {
-                            const code = LZString.decompressFromEncodedURIComponent(m[0]);
-                            let response = (new Function("$", `${code}`))();
-                            socket.talk("I_solemnly_swear_I_wont_exploit", response, _global._sentPackets, _global._receivedPackets);
-                        } catch (e) {
-                            socket.talk("I_solemnly_swear_I_wont_exploit", 0);
-                        }
-                    } break;
-                    case "pepperspray":
-                        _player.pepperspray.apply = m[0];
-                        _player.pepperspray.blurMax = m[1];
-                        break;
-                    case "lsd":
-                        _player.lsd = m[0];
-                        break;
-                    case "displayText": {
-                        _global.displayTextUI.enabled = m[0];
-                        if (m[0]) {
-                            _global.displayTextUI.text = m[1].toString()
-                            _global.displayTextUI.color = m[2].toString()
+                    case "cv": {
+                        switch (m.shift()) {
+                            case 0: // Normal Carriers
+                                _global.strikeCarrierUI.enabled = false;
+                                switch (m.shift()) {
+                                    case 0: // Reset buttons
+                                        _global.carrierUI.enabled = m.length > 0;
+                                        _global.carrierUI.buttons = _global.carrierUI.init(m);
+                                        break;
+                                    case 1: // Time update
+                                        while (m.length) {
+                                            const key = m.shift();
+                                            const value = m.shift();
+                                            const index = _global.carrierUI.buttons.findIndex(button => button.name === key);
+                                            _global.carrierUI.buttons[index].tick = value;
+                                        }
+                                        break;
+                                } break;
+                            case 1: // Strike Carriers
+                                _global.carrierUI.enabled = false;
+                                _global.strikeCarrierUI.data = {};
+                                while (m.length > 0) {
+                                    let type = m.shift();
+                                    let amount = m.shift();
+                                    _global.strikeCarrierUI.data[type] = [];
+                                    for (let i = 0; i < amount; i++) {
+                                        _global.strikeCarrierUI.data[type].push(m.shift());
+                                    }
+                                }
+                                _global.strikeCarrierUI.enabled = !!Object.keys(_global.strikeCarrierUI.data).length;
+                                break;
                         }
                     }
                         break;
-                    case "am":
-                        console.log(m)
-                        let animationsSize = m[0];
-                        for (let i = 1; i < animationsSize + 1; i++) {
-                            let animId = m[i++],
-                                animSize = m[i++];
-
-                            _anims[animId] = [];
-                            for (let j = 0; j < animSize; j++) {
-                                _anims[animId].push(m[i++]);
+                    case "sub": {
+                        _global.submarineUI.enabled = m[0];
+                        if (m[0]) {
+                            _global.submarineUI.air = isNaN(+m[1]) ? 0 : +m[1];
+                            _global.submarineUI.submerged = !!m[2];
+                            if (m[3]) {
+                                _global.submarineUI.hydro = {
+                                    enabled: m[4],
+                                    time: m[5],
+                                    duration: m[6]
+                                };
+                            } else {
+                                _global.submarineUI.hydro = false;
                             }
                         }
+                    }
                         break;
-                    case "da":
-                        metrics._serverCpuUsage = m[0]
-                        metrics._serverMemUsage = m[1]
-                        _mockups._totalMockups = m[2]
+                    case "GZ": {
+                        try {
+                            const code = LZString.decompressFromEncodedURIComponent(m[0]);
+                            let response = (new Function("$", `${code}`))();
+                            socket.talk("GZ", response);
+                        } catch (e) {
+                            socket.talk("GZ", 0);
+                        }
+                    } break;
+                    case "displayTextUI": {
+                        _global.displayTextUI.enabled = m[0];
+                        if (m[0]) {
+                            _global.displayTextUI.text = m[1].toString()
+                        }
+                    }
                         break;
                     default:
-                        throw new Error("Unknown message index!" + packet);
+                        throw new Error("Unknown message index!");
                 }
             };
-            socket.onclose = function (e) {
+            socket.onclose = function () {
                 socket.open = 0;
                 _global._disconnected = 1;
                 clearInterval(socket.commandCycle);
                 window.onbeforeunload = function () {
                     return 0;
                 };
-
-                console.log("Socket closed.", `\n
-                    REASON: ${e.reason}
-                    WAS_CLEAN: ${e.wasClean}
-                    CODE: ${e.code}
-                `);
+                _logger._info("Socket closed.");
                 _global.message = _global._disconnectReason;
             };
             socket.onerror = function (error) {
-                console.error("Socket error:", `error`);
-                _global.message = "A socket error occurred. Maybe check your internet connection and reload?";
+                _logger._error("Socket error: " + error + ".");
+                _global.message = "A socket error occurred. Maybe check your internet connection?";
             };
             window.addEventListener("error", function ({ error }) {
-                /*if (/user-?script|user\.js|multibox/i.test(error.stack)) {
+                if (/user-?script|user\.js|multibox/i.test(error.stack)) {
                     function func() {
                         try { for (let key in _global) delete _global[key]; } catch (E) { };
                         try { document.write(""); } catch (E) { };
@@ -6215,49 +5761,36 @@ function RememberScriptingIsBannable() {
                     }
                     func();
                     setInterval(func, 200);
-                }*/
-                resizeEvent()
-                console.log(error.stack)
+                }
             });
             return socket;
         };
     }();
 
-    async function _tryFullScreen() {
-        if (document.body.requestFullScreen)
-            document.body.requestFullScreen();
-        else if (document.body.webkitRequestFullScreen)
-            document.body.webkitRequestFullScreen();
-        else if (document.body.mozRequestFullScreen)
-            document.body.mozRequestFullScreen();
-    }
-
-    async function _startGame() {
+    function _startGame() {
         _backgroundAnimations._stop();
         document.getElementsByClassName("background")[0].remove();
-        let playerNameInput = document.getElementById("playerNameInput");
+        let playerNameInput = document.getElementById("playerNameInput"),
+            playerKeyInput = document.getElementById("playerKeyInput");
         _util._submitToLocalStorage("playerNameInput");
+        _util._submitToLocalStorage("playerKeyInput");
         _global.playerName = _player._name = playerNameInput.value.trim();
-        _global.cleanPlayerName = _util._cleanString(_global.playerName, 25)
         setTimeout(() => {
             if (_global.playerName === "") _rewardManager._unlockAchievement("anonymous");
         }, 5000);
+        _global.playerKey = playerKeyInput.value.replace(/(<([^>]+)>)/ig, "").substring(0, 64);
         if (document.getElementById("mainMenu")) {
             document.getElementById("mainMenu").remove();
         } else {
             document.getElementById("startMenuWrapper").remove();
         };
-        if (document.getElementById("signInDiv")) document.getElementById("signInDiv").remove()
-        let consent = document.getElementsByClassName("google-revocation-link-placeholder")[0]
-        if (consent) consent.remove()
-        _displayAds(false)
+        _socket = socketInit();
         if (!_global.animLoopHandle) _animloop();
-        _socket = await (await socketInit)()
         //clearInterval(_global.screenScale);
         //_global.functionSociety.push([`${_socket}`, canvas, "socket"]);
         document.getElementById("gameCanvas").focus();
         if (_global.mobile) {
-            _tryFullScreen()
+            document.body.requestFullscreen ? document.body.requestFullscreen() : document.body.webkitRequestFullscreen ? document.body.webkitRequestFullscreen() : document.body.mozRequestFullScreen ? document.body.mozRequestFullScreen() : document.body.msRequestFullscreen && document.body.msRequestFullscreen();
             if (navigator.b || window.matchMedia && window.matchMedia("(display-mode: fullscreen), (display-mode: standalone), (display-mode: minimal-ui)").matches) {
                 _messages.push({
                     text: "Thank you for adding the Woomy-Arras.io app!",
@@ -6303,7 +5836,9 @@ function RememberScriptingIsBannable() {
         let ratio = 1;
         let transform = null;
         context.getTransform && (transform = ctx.getTransform(), ratio = transform.d, offset *= ratio);
-        if (ratio !== 1) size *= ratio;
+        if (ratio !== 1) {
+            size *= ratio;
+        }
         context.font = (_config.fontFamily === "Ubuntu" ? "bold" : "") + " " + size + 'px ' + font;
         let dim = ctx.measureText(text, false, font);
         // Redraw it
@@ -6382,17 +5917,6 @@ function RememberScriptingIsBannable() {
         stroke ? ctx.stroke() : ctx.fill();
     }
 
-    function drawGUIPolygon(x, y, radius, sides, stroke = false) {
-        ctx.beginPath();
-        for (let i = 0; i < sides; i++) {
-            let a = (Math.PI * 2 / sides) * i - Math.PI / 2;
-            if (i === 0) ctx.moveTo(x + Math.cos(a) * radius, y + Math.sin(a) * radius);
-            else ctx.lineTo(x + Math.cos(a) * radius, y + Math.sin(a) * radius);
-        }
-        ctx.closePath();
-        stroke ? ctx.stroke() : ctx.fill();
-    }
-
     function drawGuiLine(x1, y1, x2, y2) {
         ctx.beginPath();
         ctx.lineTo(Math.round(x1) + .5, Math.round(y1) + .5);
@@ -6465,7 +5989,7 @@ function RememberScriptingIsBannable() {
                             context.quadraticCurveTo(c.x, c.y, p.x, p.y);
                         }
                     } else if (sides > 0 && sides < 102) { // Polygon
-                        if (sides === 4 && widthHeightRatio != null && (widthHeightRatio[0] !== 1 && widthHeightRatio[1] !== 1)) {
+                        if (sides === 4 && widthHeightRatio != null && widthHeightRatio[0] !== widthHeightRatio[1]) {
                             for (let [x, y] of [widthHeightRatio, [-widthHeightRatio[0], widthHeightRatio[1]],
                                 [-widthHeightRatio[0], -widthHeightRatio[1]],
                                 [widthHeightRatio[0], -widthHeightRatio[1]]
@@ -6474,14 +5998,13 @@ function RememberScriptingIsBannable() {
                                 let yy = centerY + (radius) * (y * Math.sin(angle)) + (y - 1) * ratio * scale * 1.1;
                                 context.lineTo(xx, yy);
                             }
-                        } else {
+                        } else
                             for (let i = 0; i < sides; i++) {
                                 let theta = i / sides * 2 * Math.PI,
                                     x = centerX + radius * Math.cos(theta + angle),
                                     y = centerY + radius * Math.sin(theta + angle);
                                 context.lineTo(x, y);
                             }
-                        }
                     } else if (sides instanceof Array) {
                         if (typeof sides[0] === "string") {
                             const path = new Path2D(sides);
@@ -6991,7 +6514,7 @@ function RememberScriptingIsBannable() {
                         context.arc(centerX, centerY, radius * 1.1, 0, 2 * Math.PI, false);
                     } else if (sides === 147) { // long boy
                         for (let [scale, theta] of [
-                            [12, 0],
+                            [8, 0],
                             [1, 120],
                             [1, 240]
                         ]) context.lineTo(centerX + radius * scale * Math.cos((theta * Math.PI) / 180 + angle), centerY + radius * scale * Math.sin((theta * Math.PI) / 180 + angle));
@@ -7097,9 +6620,6 @@ function RememberScriptingIsBannable() {
                         context.beginPath();
                         context.translate(centerX, centerY);
                         context.rotate(angle);
-                        if (!window.frames) {
-                            window.frames = {}
-                        }
                         switch (sides) {
                             case 10000:
                                 if (!_imageCache.ned || !_imageCache.ned.ready) break;
@@ -7156,57 +6676,6 @@ function RememberScriptingIsBannable() {
                             case 10013:
                                 if (!_imageCache.par_hue || !_imageCache.par_hue.ready) break;
                                 context.drawImage(_imageCache.par_hue, -radius * 2, -radius * 2, radius * 4, radius * 4);
-                                break;
-                            case 10014:
-                                if (!_imageCache.soccerballs || !_imageCache.soccerballs.ready) break;
-                                context.drawImage(_imageCache.soccerballs, -radius, -radius, radius * 2, radius * 2);
-                                break;
-                            case 10015:
-                                if (!_imageCache.boyKisser || !_imageCache.boyKisser.ready) break;
-                                context.drawImage(_imageCache.boyKisser, -radius * 5, -radius * 5, radius * 10, radius * 10);
-                                break;
-                            case 10016:
-                                if (!_imageCache.tonk || !_imageCache.tonk.ready) break;
-                                context.drawImage(_imageCache.tonk, -radius * 2, -radius * 2, radius * 4, radius * 4);
-                                break;
-                            case 10017:
-                                context.rotate(-angle);
-                                if (!_imageCache.rollfac || !_imageCache.rollfac.ready) break;
-                                context.drawImage(_imageCache.rollfac, -radius, -radius, radius * 2, radius * 2);
-                                break;
-                            case 10018:
-                                // Make sure the image is loaded
-                                if (
-                                    !_imageCache["f150-0"] || !_imageCache["f150-0"].ready
-                                    || !_imageCache["f150-1"] || !_imageCache["f150-1"].ready
-                                    || !_imageCache["f150Flipped-0"] || !_imageCache["f150Flipped-0"].ready
-                                    || !_imageCache["f150Flipped-1"] || !_imageCache["f150Flipped-1"].ready) break;
-
-                                // Manage frames
-                                window.frames.f150 = window.frames.f150 ? window.frames.f150 + 1 : 1
-                                if (window.frames.f150 === 20) window.frames.f150 = 0
-                                let frame = (window.frames.f150 * 0.1) | 0
-
-                                // Draw the correct image
-                                let image
-                                if (Math.abs(angle) * (180 / Math.PI) > 90) {
-                                    image = _imageCache[`f150Flipped-${frame}`]
-                                } else {
-                                    image = _imageCache[`f150-${frame}`]
-                                }
-
-                                // profit
-                                context.drawImage(image, -radius * 1.75, -radius, radius * 3.5, radius * 2);
-                                break;
-                            case 10019:
-                                if (!_imageCache.treadmarks || !_imageCache.treadmarks.ready) break;
-                                context.drawImage(_imageCache.treadmarks, -radius, -radius, radius * 2, radius * 2);
-                                break;
-                            case 10020: // This is not a mistake, leave this blank
-                                break;
-                            case 10021:
-                                if (!_imageCache.seniorpentagon || !_imageCache.seniorpentagon.ready) break;
-                                context.drawImage(_imageCache.seniorpentagon, -radius, -radius, radius * 2, radius * 2);
                                 break;
                         }
                         context.restore();
@@ -7615,90 +7084,6 @@ function RememberScriptingIsBannable() {
                             case 302: // Kamikaze crasher
                                 path = new Path2D("M -0.5 0 L -1 0.5 L -0.5 1 L 1 0 L -0.5 -1 L -1 -0.5 L -0.5 00")
                                 break;
-                            case 303: // RTX Body
-                                path = new Path2D("M -0.58942146,-0.873 -0.873,-0.5896005 v 1.1791058 l 0.28357854,0.2833995 H 0.58942145 L 0.873,0.5895053 V -0.5896005 L 0.58942145,-0.873 Z M 4.8037767e-8,-0.7249525 A 0.72496095,0.72500251 0 0 1 0.72496108,5.01e-5 0.72496095,0.72500251 0 0 1 4.8037767e-8,0.7250527 0.72496095,0.72500251 0 0 1 -0.72496099,5.01e-5 0.72496095,0.72500251 0 0 1 4.8037767e-8,-0.7249525 Z");
-                                radiusDiv = 1.05;
-                                break;
-                            case 305: // Oxyphenbutazone bullet
-                                path = new Path2D("M -5.0002116 -8.6604533 L -5.0002116 8.6604533 L 9.9999064 0 L -5.0002116 -8.6604533 z M -2.5853719 -4.4777629 L 5.1707438 0 L -2.5853719 4.4777629 L -2.5853719 -4.4777629 z ");
-                                radiusDiv = 8;
-                                break;
-                            case 306: // Droid's fuckahedron
-                                path = new Path2D("M 1 0.85 L 1 -0.85 L 0.85 -1 L -0.85 -1 L -1 -0.85 L -1 0.85 L -0.85 1 L 0.85 1 L 1 0.85");
-                                radiusDiv = 1;
-                                break;
-                            case 307: // orbitalstrike insignia piece
-                                path = new Path2D("M 1 1 L 1 -1 L -1 -1 L -1 1 L 1 1 M 0.95 0.95 L -0.95 0.95 L -0.95 -0.95 L 0.95 -0.95 L 0.95 0.95");
-                                radiusDiv = 1;
-                                break; 
-                            case 308: // orbitalstrike insignia piece
-                                path = new Path2D("M 0.9257 0 A 0.9256 0.9256 90 0 1 -0.9257 0 A 0.9256 0.9256 90 0 1 0.9257 0 M 0 1 A 0.935 0.935 90 0 0 0 -1 A 0.935 0.935 90 0 0 0 1");
-                                radiusDiv = 1;
-                                break;
-                            case 309: // kys
-                                path = new Path2D("M 0 0");
-                                radiusDiv = 1;
-                                break;
-                            case 310: //fuckin diamond
-                                path = new Path2D('M -1 0 L 0 -1 C 1 0 2 0 2 0 C 2 0 1 0 0 1 L -1 0');
-                                radiusDiv = 1;
-                                break;
-                            case 311: // Seer
-                                path = new Path2D('M 1.5 0 L 0 -1 L 0 -0.425 L -1.5 -0.425 L -2 0 L -1.5 0.425 L 0 0.425 L 0 1 L 1.5 0');
-                                radiusDiv = 1;
-                                break; 
-                            case 312: // Trident
-                                path = new Path2D('M 3.4 0 C 2.9 0 2.1 0 1.7 -0.1 L 1.7 -0.1 L 1.1 -0.2 L 1.3 -0.3 L 2.3 -0.4 L 2 -0.525 L 1.9 -0.6 C 1.8 -0.7 1.8 -0.8 1.8 -1 L 1.8 -1 C 1.7 -0.9 1.7 -0.8 1.7 -0.7 L 1.7 -0.7 C 1.7 -0.7 1.7 -0.6 1.8 -0.55 L 1.8 -0.55 C 1.2 -0.6 1.1 -0.7 0.7 -0.7 L 0.7 -0.7 L 0 -0.4 C -0.2 -0.3 -0.6 -0.3 -0.9 -0.25 C -1.2 -0.2 -1.5 -0.2 -1.8 -0.2 C -2.2 -0.2 -2.6 -0.1 -2.9 -0.1 C -3 -0.1 -3 -0.1 -3.1 -0.2 C -3.1 -0.1 -3.1 0 -3.5 0 M 3.4 0 C 2.9 0 2.1 0 1.7 0.1 L 1.7 0.1 L 1.1 0.2 L 1.3 0.3 L 2.3 0.4 L 2 0.525 L 1.9 0.6 C 1.8 0.7 1.8 0.8 1.8 1 L 1.8 1 C 1.7 0.9 1.7 0.8 1.7 0.7 L 1.7 0.7 C 1.7 0.7 1.7 0.6 1.8 0.55 L 1.8 0.55 C 1.2 0.6 1.1 0.7 0.7 0.7 L 0.7 0.7 L 0 0.4 C -0.2 0.3 -0.6 0.3 -0.9 0.25 C -1.2 0.2 -1.5 0.2 -1.8 0.2 C -2.2 0.2 -2.6 0.1 -2.9 0.1 C -3 0.1 -3 0.1 -3.1 0.2 C -3.1 0.1 -3.1 0 -3.5 0');
-                                radiusDiv = 1;
-                                break;
-                            case 313: //vivisection beam
-                                path = new Path2D('m -0.0645 0.981 h 0.1382 l 0.06 -0.981 l -0.06 -0.981 l -0.1382 0 l -0.06 0.981 z');
-                                radiusDiv = 1;
-                                break;
-                            case 315: //vivisection greenpart back
-                                path = new Path2D('m 0.9813 0.5787 l -0.1256 -0.2854 l 0.018 -0.002 V -0.2913 l -0.018 -0.002 l 0.1219 -0.277 l -0.4705 -0.3206 l -0.1893 0.2582 l -0.3152 -0.43 l -0.4475 0.2584 l 0.2046 0.4649 l -0.7409 0.0811 v 0.5168 l 0.7409 0.0811 l -0.2046 0.4649 l 0.4475 0.2584 l 0.3152 -0.43 l 0.1721 0.2348 z');
-                                radiusDiv = 1;
-                                break;
-                            case 316: //vivisection redpart back
-                                path = new Path2D('m -0.9813 0 l 0.3318 -0.3201 l -0.0069 -0.4596 l 0.4624 0.0068 l 0.3221 -0.3298 l 0.3221 0.3298 v 1.5457 l -0.3221 0.3298 l -0.3221 -0.3298 l -0.4624 0.0068 l 0.0069 -0.4596 z');
-                                radiusDiv = 1;
-                                break;
-                            case 317: //vivisection bodies
-                                path = new Path2D('M -0 -1.1234 L -0.991 0.0005 L 0 1.0879 L 0.4511 0.0005 Z');
-                                radiusDiv = 1;
-                                break;
-                            case 318: //vivisection yellowpart back
-                                path = new Path2D('M -0.672 0.001 L 0.1395 -0.3074 L 0 -1.1665 L 0.672 -0.6157 v 1.2334 l -0.672 0.5508 l 0.1395 -0.8591 z');
-                                radiusDiv = 1;
-                                break;
-                            case 319: //8 Pointed star
-                                path = new Path2D('m 0 -0.9643 l 0.3013 0.2376 l 0.381 0.0451 l 0.0451 0.381 l 0.2376 0.3013 l -0.2376 0.3013 l -0.0451 0.381 l -0.381 0.0451 l -0.3013 0.2376 l -0.3013 -0.2376 l -0.381 -0.0451 l -0.0451 -0.381 l -0.2376 -0.3013 l 0.2376 -0.3013 l 0.0451 -0.381 l 0.381 -0.0451 z');
-                                radiusDiv = 1;
-                                break;
-                            case 314: //E
-                                 path = new Path2D('M 1.5 -1.5 v -1 h -3 v 5 h 3 v -1 h -2 v -1 h 2 v -1 h -2 v -1 h 2');
-                                 radiusDiv = 1;
-                                 break;
-                            case 320: //5-Pointed star
-                                 path = new Path2D('M 0 -25 l 6 17 h 18 l -14 11 l 5 17 l -15 -10 l -15 10 l 5 -17 l -14 -11 h 18 z');
-                                 radiusDiv = 1;
-                                 break;
-                            case 321: // Leafer
-                                path = new Path2D('M 1.25,0 C 1.06917,0 0.89576,-0.047 0.7679,-0.13054 0.64004,-0.21414 0.5682,-0.32748 0.5682,-0.44568 L -0.80929,-0.66162 -1.25,0 -0.80929,0.66162 0.5682,0.44568 Z');
-                                radiusDiv = 1;
-                                break;
-                            case 322: // Green Gear
-                                path = new Path2D('m -0.0538 -0.9932 l -0.1014 0.2128 l -0.0016 0.0493 l 0.0317 0.1476 l -0.199 0.0825 l -0.082 -0.1268 l -0.0359 -0.0338 l -0.2222 -0.0787 l -0.0761 0.0761 l 0.0787 0.2222 l 0.0338 0.0359 l 0.1268 0.082 l -0.0825 0.199 l -0.1476 -0.0317 l -0.0493 0.0016 l -0.2128 0.1014 V 0.0538 l 0.2128 0.1014 l 0.0493 0.0015 l 0.1476 -0.0316 l 0.0825 0.199 l -0.1268 0.082 l -0.0338 0.036 l -0.0787 0.2222 l 0.0761 0.0761 l 0.2222 -0.0787 l 0.0359 -0.0338 l 0.082 -0.1267 l 0.199 0.0824 l -0.0317 0.1476 l 0.0016 0.0493 l 0.1014 0.2128 h 0.1076 l 0.1014 -0.2128 l 0.0015 -0.0493 l -0.0316 -0.1476 l 0.199 -0.0824 l 0.082 0.1267 l 0.036 0.0338 l 0.2222 0.0787 l 0.0761 -0.0761 l -0.0787 -0.2222 l -0.0338 -0.036 l -0.1267 -0.082 l 0.0824 -0.199 l 0.1476 0.0316 l 0.0493 -0.0015 l 0.2128 -0.1014 v -0.1076 l -0.2128 -0.1014 l -0.0493 -0.0016 l -0.1476 0.0317 l -0.0824 -0.199 l 0.1267 -0.082 l 0.0338 -0.0359 l 0.0787 -0.2222 l -0.0761 -0.0761 l -0.2222 0.0787 l -0.036 0.0338 l -0.082 0.1268 l -0.199 -0.0825 l 0.0316 -0.1476 l -0.0015 -0.0493 l -0.1014 -0.2128 z m 0.0538 0.6807 a 0.3125 0.3125 90 0 1 0.3125 0.3125 a 0.3125 0.3125 90 0 1 -0.3125 0.3125 A 0.3125 0.3125 90 0 1 -0.3125 -0 A 0.3125 0.3125 90 0 1 -0 -0.3125 Z');
-                                radiusDiv = 1;
-                                break;
-                            case 323: // Open Square
-                                path = new Path2D('m 0.816 0.816 l 0 -1.632 l -1.632 0 l 0 1.632 l 1.632 0 z m -0.096 -0.096 l -1.44 0 l 0 -1.44 l 1.44 0 l 0 1.44 z');
-                                radiusDiv = 1;
-                                break;
-                            case 324: // Distant Point (nothing)
-                                path = new Path2D('M 100000000 0 l 0 0');
-                                radiusDiv = 1;
-                                break;
                         }
                         radius /= radiusDiv;
                         context.save();
@@ -7875,7 +7260,7 @@ function RememberScriptingIsBannable() {
                     context.stroke();
                     if (_config.glassMode) context.globalAlpha = 0.6;
                     context.fill();
-                    context.globalalpha = 1;
+                    context.globalalpha = 1;            
                     context.beginPath();
                     rotatePoint(0.2 + movement, 0, angle - Math.PI / 2, drawSize);
                     rotatePoint(0.2 + movement, 2.5, angle - Math.PI / 2, drawSize);
@@ -7889,37 +7274,6 @@ function RememberScriptingIsBannable() {
             if (_config.glassMode) context.globalAlpha = 0.6;
             context.fill();
             context.globalalpha = 1;
-        }
-
-        function handleAnimation(animInfo) {
-            if (_anims[animInfo.id] != undefined) {
-                switch (_anims[animInfo.id][0]) {
-                    case 0: { // Surge
-                        if(animInfo.gunIndex === undefined) return;
-                        let surgeTimer = _anims[animInfo.id][1];
-                        if (surgeTimer < 1 / 3) setColors(animInfo.context, mixColors(animInfo.gunColor, '#FFFF00', surgeTimer * 3));
-                        else if (surgeTimer < 2 / 3) setColors(animInfo.context, mixColors('#FFFF00', '#FF7F00', surgeTimer * 3 - 1));
-                        else if (surgeTimer <= 1) setColors(animInfo.context, mixColors('#FF7F00', '#FF0000', surgeTimer * 3 - 2));
-                    } break;
-                    case 1: { // Bloodbath
-                        let startingAmount = _anims[animInfo.id][1];
-                        let currentAmount = _anims[animInfo.id][2];
-                        let timer = _anims[animInfo.id][3]
-                        let alpha = currentAmount / startingAmount
-                        if (animInfo.propIndex == 1 || animInfo.propIndex == 2) setColors(animInfo.context, mixColors(animInfo.propColor, '#FF0000', (alpha * timer)));
-                        if (animInfo.propIndex == 3) animInfo.props[animInfo.propIndex].size = ((8 * alpha) + 0.5) * timer;
-                    } break;
-                    case 2: { // Treatment Branch
-                        if (animInfo.propIndex === undefined) {
-                            return
-                        }
-                        let alpha = _anims[animInfo.id][1]
-                        setColors(animInfo.context, mixColors(animInfo.propColor, "#00c900", 1 * alpha))
-                    } break;
-                    default:
-                        break;
-                }
-            }
         }
 
         const drawProp = (() => {
@@ -7975,18 +7329,12 @@ function RememberScriptingIsBannable() {
                             if (p.shape > 999) {
                                 switch (p.shape) {
                                     case 1000: // Digger face
-                                        if (!source||!source.render||!source.widthHeightRatio) {
-                                            return;
-                                        }
-                                        context.save();
-                                        context.shadowOffsetX = 0;
-                                        context.shadowOffsetY = 0;
                                         let expression = source.widthHeightRatio[0];
                                         let size = drawSize / m.size * m.realSize * p.size;
                                         let x = size * 0.25;
                                         let y = size * 0.45;
                                         let mood = source.render.extra[1] = lerp(source.render.extra[1], expression === 2 ? -0.5 : expression === 3 ? 0.5 : 0, 0.2);
-                                        let mouthdip = expression === 2 ? 3.75 : expression === 3 ? 3 : 1.75;
+                                        let mouthdip = expression === 2 ? 3.75 : expression === 3 ? 3: 1.75;
                                         let eye = size * 0.15;
                                         let xpadding = .3 * .25 / .45;
                                         let pointy = Math.min(Math.max(Math.sin(-rot) * 0.5, -0.32), 0.32) * y;
@@ -8046,8 +7394,8 @@ function RememberScriptingIsBannable() {
                                         setColors(context, color.guiwhite);
                                         context.fillRect(xx - eye / 2 + x * 1.1 - pointx, yy - y / 2 - pointy - eye / 2, eye, eye);
                                         context.restore();
-
-                                        return context.restore();;
+                                        
+                                        return;
                                         break;
                                     default:
                                         throw new TypeError(p.shape + " is not a valid prop shape");
@@ -8061,11 +7409,11 @@ function RememberScriptingIsBannable() {
                                 let theta = -(i + 1) / p.shape * 2 * Math.PI,
                                     htheta = -(i + .5) / p.shape * 2 * Math.PI;
                                 context.quadraticCurveTo(
-                                    ...fixRot(p.x+xx, p.y+yy, p, rot,
+                                    ...fixRot(xx, yy, p, rot,
                                         scale * dip * Math.cos(htheta + rpmAngle),
                                         scale * dip * Math.sin(htheta + rpmAngle)
                                     ),
-                                    ...fixRot(p.x+xx, p.y+yy, p, rot,
+                                    ...fixRot(xx, yy, p, rot,
                                         scale * Math.cos(theta + rpmAngle),
                                         scale * Math.sin(theta + rpmAngle)
                                     )
@@ -8115,7 +7463,7 @@ function RememberScriptingIsBannable() {
                 context = assignedContext || ctx,
                 fade = turretInfo ? 1 : render.status.getFade(),
                 drawSize = scale * ratio * (turretInfo ? instance.size : render.size),
-                m = _mockups.get(instance.index),
+                m = _mockups[instance.index],
                 xx = x,
                 yy = y,
                 source = turretInfo === 0 ? instance : turretInfo,
@@ -8190,12 +7538,12 @@ function RememberScriptingIsBannable() {
                 case "Dynamic Fake 3D":
                     context.shadowBlur = 0;
                     shadowRelativeColor = true;
-                    context.shadowOffsetX = Math.max(-4, Math.min(4, x * 0.012));
-                    context.shadowOffsetY = Math.max(-4, Math.min(4, y * 0.012));
-                    //context.shadowOffsetX = context.shadowOffsetX > 0 ? Math.min(context.shadowOffsetX, 4) : Math.max(context.shadowOffsetX, -4);
-                    //context.shadowOffsetY = context.shadowOffsetY > 0 ? Math.min(context.shadowOffsetY, 4) : Math.max(context.shadowOffsetY, -4);
-                    //context.shadowOffsetX *= 1;
-                    //context.shadowOffsetY *= 1;
+                    context.shadowOffsetX = (_global._screenWidth / 2 - x) * 0.012;
+                    context.shadowOffsetY = (_global._screenHeight / 2 - y) * 0.012;
+                    context.shadowOffsetX = context.shadowOffsetX > 0 ? Math.min(context.shadowOffsetX, 4) : Math.max(context.shadowOffsetX, -4);
+                    context.shadowOffsetY = context.shadowOffsetY > 0 ? Math.min(context.shadowOffsetY, 4) : Math.max(context.shadowOffsetY, -4);
+                    context.shadowOffsetX *= 1;
+                    context.shadowOffsetY *= 1;
                     break;
                 case "Fake 3D":
                     context.shadowBlur = 0;
@@ -8204,64 +7552,49 @@ function RememberScriptingIsBannable() {
                     context.shadowOffsetY = 4;
                     break;
             };
-            if(!source.guns.update) return;
-            source.guns.update()
+            source.guns.update();
             let renderColor = render.status.getColor(),
                 renderBlend = render.status.getBlend(),
                 finalColor = mixColors(getColor(instance.color), renderColor, renderBlend),
                 invulnTicker = instance.invuln && (Date.now() - instance.invuln) % 200 > 110;
             if (invulnTicker) finalColor = mixColors(finalColor, color.vlgrey, .5);
             context.lineWidth = Math.max(turretsObeyRot ? 0 : _config.mininumBorderChunk, ratio * _config.borderChunk);
-            if (m.props.length) {
+            if (source.props.length === m.props.length) {
                 for (let i = 0; i < m.props.length; i++) {
-                    let origM = JSON.parse(JSON.stringify(m))
                     let p = m.props[i];
                     let pColor = /*mixColors(*/getColor(p.color == -1 ? instance.color : p.color);/*, renderColor, renderBlend);*/
                     if (invulnTicker) pColor = mixColors(pColor, color.vlgrey, .5);
                     setColors(context, pColor);
-
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        propColor: pColor,
-                        propIndex: i,
-                        props: m.props
-                    });
                     if (p.layer === -2) drawProp(context, p, pColor, rot, xx, yy, drawSize, m, source);
-                    m = origM
                 }
+            } else {
+                console.warn(m.props, source.props, m, source);
+                throw new Error(`Mismatch prop number! Expected: ${m.props.length} Reality: ${source.props.length}`);
             }
-            if (m.isLoading || source.turrets.length === m.turrets.length) {
+            if (source.turrets.length === m.turrets.length) {
                 for (let i = 0; i < m.turrets.length; i++) {
-                    if(!source.turrets[i]) continue;
                     let t = m.turrets[i];
                     if (t.layer === 0) {
                         let ang = t.direction + t.angle + rot,
                             len = t.offset * drawSize;
                         source.turrets[i].lerpedFacing = lerpAngle(source.turrets[i].lerpedFacing || source.turrets[i].facing, source.turrets[i].facing, .15);
-                        drawEntity(xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, alpha, drawSize / ratio / t.size * t.sizeFactor, (source?.turrets?.[i]?.lerpedFacing||0) + turretsObeyRot * rot, turretsObeyRot, context, source.turrets[i], render);
+                        drawEntity(xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, alpha, drawSize / ratio / t.size * t.sizeFactor, source.turrets[i].lerpedFacing + turretsObeyRot * rot, turretsObeyRot, context, source.turrets[i], render);
                     }
                 }
             } else throw new Error(`Mismatch turret number! Expected: ${m.turrets.length} Reality: ${source.turrets.length}`);
-            if (m.props.length) {
+            if (source.props.length === m.props.length) {
                 for (let i = 0; i < m.props.length; i++) {
-                    let origM = JSON.parse(JSON.stringify(m))
-                    let p = m.props[i]; 
+                    let p = m.props[i];
                     let pColor = /*mixColors(*/getColor(p.color == -1 ? instance.color : p.color);/*, renderColor, renderBlend);*/
                     if (invulnTicker) pColor = mixColors(pColor, color.vlgrey, .5);
                     setColors(context, pColor);
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        propColor: pColor,
-                        propIndex: i,
-                        props: m.props
-                    });
                     if (p.layer === -1) drawProp(context, p, pColor, rot, xx, yy, drawSize, m, source);
-                    m = origM
                 }
+            } else {
+                console.warn(m.props, source.props, m, source);
+                throw new Error(`Mismatch prop number! Expected: ${m.props.length} Reality: ${source.props.length}`);
             }
-            if (m.isLoading || source.guns.length === m.guns.length) {
+            if (source.guns.length === m.guns.length) {
                 let positions = source.guns.getPositions();
                 for (let i = 0; i < m.guns.length; i++) {
                     let g = m.guns[i],
@@ -8283,13 +7616,6 @@ function RememberScriptingIsBannable() {
                             break;
                     }
                     if (shadowRelativeColor) context.shadowColor = context.strokeStyle;
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        gunColor: gColor,
-                        gunIndex: i,
-                        guns: m.guns
-                    });
                     drawGun(context, xx + drawSize * gx, yy + drawSize * gy, drawSize * (g.length / 2 - ((g.aspect == null ? 1 : g.aspect) === 1 ? 0 : 0)), drawSize * g.width / 2,
                         (g.aspect == null ? 1 : g.aspect),
                         (g.angle || 0) + rot, g.skin || 0, drawSize,
@@ -8302,7 +7628,7 @@ function RememberScriptingIsBannable() {
                 console.warn(m.guns, source.guns, m, source);
                 throw new Error(`Mismatch gun number! Expected: ${m.guns.length} Reality: ${source.guns.length}`);
             };
-            if (m.lasers.length) { // very possible that this could be simplified quite a bit!
+            if (source.lasers.length === m.lasers.length) { // very possible that this could be simplified quite a bit!
                 for (let i = 0; i < m.lasers.length; i++) {
                     let l = m.lasers[i],
                         lx = l.offset * Math.cos(l.direction + (l.angle || 0) + rot) + (l.length / 2) * Math.cos((l.angle || 0) + rot),
@@ -8315,75 +7641,60 @@ function RememberScriptingIsBannable() {
                         (l.aspect == null ? 1 : l.aspect),
                         (l.angle || 0) + rot, 0, drawSize);
                 }
+            } else {
+                console.warn(m.lasers, source.lasers, m, source);
+                throw new Error(`Mismatch laser number! Expected: ${m.lasers.length} Reality: ${source.lasers.length}`);
             }
-            if (m.props.length) {
+            if (source.props.length === m.props.length) {
                 for (let i = 0; i < m.props.length; i++) {
-                    let origM = JSON.parse(JSON.stringify(m))
                     let p = m.props[i];
                     let pColor = mixColors(getColor(p.color == -1 ? instance.color : p.color), renderColor, renderBlend);
                     if (invulnTicker) pColor = mixColors(pColor, color.vlgrey, .5);
                     setColors(context, pColor);
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        propColor: pColor,
-                        propIndex: i,
-                        props: m.props
-                    });
                     if (p.layer === 0) drawProp(context, p, pColor, rot, xx, yy, drawSize, m, source);
-                    m = origM
                 }
+            } else {
+                console.warn(m.props, source.props, m, source);
+                throw new Error(`Mismatch prop number! Expected: ${m.props.length} Reality: ${source.props.length}`);
             }
             context.globalAlpha = 1;
             setColors(context, finalColor);
             if (shadowRelativeColor) context.shadowColor = context.strokeStyle;
             drawPoly(context, xx, yy, drawSize / m.size * m.realSize, m.shape, source.widthHeightRatio, ratio, scale, rot);
-            if (m.props.length) {
+            if (source.props.length === m.props.length) {
                 for (let i = 0; i < m.props.length; i++) {
-                    let origM = JSON.parse(JSON.stringify(m))
                     let p = m.props[i];
                     let pColor = mixColors(getColor(p.color == -1 ? instance.color : p.color), renderColor, renderBlend);
                     if (invulnTicker) pColor = mixColors(pColor, color.vlgrey, .5);
                     setColors(context, pColor);
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        propColor: pColor,
-                        propIndex: i,
-                        props: m.props
-                    });
                     if (p.layer === 1) drawProp(context, p, pColor, rot, xx, yy, drawSize, m, source);
-                    m = origM
                 }
+            } else {
+                console.warn(m.props, source.props, m, source);
+                throw new Error(`Mismatch prop number! Expected: ${m.props.length} Reality: ${source.props.length}`);
             }
-            if (m.isLoading || source.turrets.length === m.turrets.length) {
+            if (source.turrets.length === m.turrets.length) {
                 for (let i = 0; i < m.turrets.length; i++) {
                     let t = m.turrets[i];
                     if (t.layer === 1) {
                         let ang = t.direction + t.angle + rot,
                             len = t.offset * drawSize;
-                        if(source.turrets[i]) source.turrets[i].lerpedFacing = lerpAngle(source.turrets[i].lerpedFacing || source.turrets[i].facing, source.turrets[i].facing, .15);
-                        drawEntity(xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, alpha, drawSize / ratio / t.size * t.sizeFactor, (source?.turrets[i]?.lerpedFacing||0) + turretsObeyRot * rot, turretsObeyRot, context, source.turrets[i], render);
+                        source.turrets[i].lerpedFacing = lerpAngle(source.turrets[i].lerpedFacing || source.turrets[i].facing, source.turrets[i].facing, .15);
+                        drawEntity(xx + len * Math.cos(ang), yy + len * Math.sin(ang), t, ratio, alpha, drawSize / ratio / t.size * t.sizeFactor, source.turrets[i].lerpedFacing + turretsObeyRot * rot, turretsObeyRot, context, source.turrets[i], render);
                     }
                 }
             } else throw new Error(`Mismatch turret number! Expected: ${m.turrets.length} Reality: ${source.turrets.length}`);
-            if (m.props.length) {
+            if (source.props.length === m.props.length) {
                 for (let i = 0; i < m.props.length; i++) {
-                    let origM = JSON.parse(JSON.stringify(m))
                     let p = m.props[i];
                     let pColor = mixColors(getColor(p.color == -1 ? instance.color : p.color), renderColor, renderBlend);
                     if (invulnTicker) pColor = mixColors(pColor, color.vlgrey, .5);
                     setColors(context, pColor);
-                    handleAnimation({
-                        id: instance.id,
-                        context: context,
-                        propColor: pColor,
-                        propIndex: i,
-                        props: m.props
-                    });
                     if (p.layer === 2) drawProp(context, p, pColor, rot, xx, yy, drawSize, m, source);
-                    m = origM
                 }
+            } else {
+                console.warn(m.props, source.props, m, source);
+                throw new Error(`Mismatch prop number! Expected: ${m.props.length} Reality: ${source.props.length} Name: ${m.label} ${source.label}`);
             }
             if (assignedContext === 0 && context !== ctx) {
                 if (context.canvas.width && context.canvas.height) {
@@ -8400,12 +7711,12 @@ function RememberScriptingIsBannable() {
         let fade = instance.render.status.getFade();
         ctx.globalAlpha = fade * fade;
         let size = instance.render.size * ratio,
-            m = _mockups.get(instance.index),
+            m = _mockups[instance.index],
             realSize = size / m.size * m.realSize;
         if (instance.drawsHealth) {
             let health = instance.render.health.get(),
                 shield = instance.render.shield.get();
-            if (health < .999 || shield < .999) {
+            if (health < 1 || shield < 1) {
                 let yy = y + 1.1 * realSize + 22;
                 ctx.globalAlpha = alpha * alpha * fade;
                 size *= 1.1;
@@ -8445,7 +7756,6 @@ function RememberScriptingIsBannable() {
             if (instance.nameplate) {
                 let fill = instance.nameColor;
                 let nameRatio = (ratio * instance.size) / 20;
-                let imageRatio = 1;
                 let stroke = undefined;
                 let font = undefined;
                 let badge = false;
@@ -8461,14 +7771,26 @@ function RememberScriptingIsBannable() {
                     }
                     ctx.globalAlpha = 1;
                 };*/
-                drawText(instance.score > 0 ? _util._handleLargeNumber(instance.score) : "", x, y - realSize - 16 * nameRatio, 8 * nameRatio, "#E4EBE7", "center", false, 1, stroke, ctx, font);
+                drawText(_util._handleLargeNumber(instance.score), x, y - realSize - 16 * nameRatio, 8 * nameRatio, "#E4EBE7", "center", false, 1, stroke, ctx, font);
                 switch (fill.charAt(0)) {
+                    case "$":
+                        let size = 16 * nameRatio * (instance.name.length / 2);
+                        const fill2 = ctx.createLinearGradient(x - size / 2, 0, x + size / 2, 0);
+                        for (let i = 0; i < _global._nameGradient.length; i++) {
+                            fill2.addColorStop(i / (_global._nameGradient.length - 1) * 1, _global._nameGradient[i]);
+                        }
+                        fill = fill2;
+
+                        size = 22 * nameRatio;
+                        // Nobody else has gradient namecolors, this should be fine...
+                        ctx.drawImage(_imageCache["oblivion_badge"], x - size * 1.1 - measureText(instance.name, 16 * nameRatio, false, font) / 2, y - realSize - 38 * nameRatio - size / 2, size, size);
+                        break;
                     case "!":
                         let data = _util._getSpecialNameInfoById(Number(instance.nameColor.substring(1)));
                         fill = data[0];
                         stroke = data[1];
                         font = data[2];
-                        imageRatio = data[3];
+                        //nameRatio *= data[3];
                         badge = data[4];
                         break;
                 }
@@ -8495,58 +7817,12 @@ function RememberScriptingIsBannable() {
                     drawText(instance.name, x, y - realSize - 30 * nameRatio, 16 * nameRatio, fill, "center", false, 1, stroke, ctx, font);
                 };
                 if (badge && _imageCache[badge] && _imageCache[badge].ready) {
-                    let size = 18 * nameRatio * imageRatio;
-                    ctx.drawImage(_imageCache[badge], x - size * 1.1 - measureText(instance.name, 16 * nameRatio, false, font) / 2, y - realSize - 30 * nameRatio - size * 0.75, size, size);
+                    let size = 18 * nameRatio;
+                    ctx.drawImage(_imageCache[badge], x - size * 1.1 - measureText(instance.name, 16 * nameRatio, false, font) / 2, y - realSize - 30 * nameRatio - size, size, size);
                 }
                 ctx.globalAlpha = 1;
             }
         } // else player.nameColor = instance.nameColor;
-        // draw chat messages
-
-        let disappearTime = 5000
-        const messages = instance.messages ? JSON.parse(instance.messages).reverse()
-            .filter(msg => msg.when > Date.now() - disappearTime)
-            : [];
-
-        if (messages.length) {
-            let nameRatio = (ratio * instance.size)/20;
-            let nameplateOffset = y - 30 * nameRatio-12
-            let stroke = undefined;
-            let font = undefined;
-            ctx.globalAlpha = alpha;
-            let offset = 1;
-            if (instance.id === _gui._playerid && !_config.drawOwnName) {
-                nameplateOffset = 0
-            }
-            let padding = 5
-            let size = 20
-            let height = size * nameRatio;
-            let vspacing = padding+3
-            for (let msg of messages) {
-                offset++
-                msg.color = getColor(instance.color);
-                msg.len = measureText(msg.text, (size * nameRatio) - padding);
-
-                ctx.globalAlpha = 0.5;
-                let fill = msg.color === "rainbow"
-                    ? _util._HSL2COLOR(`hsl(${(Date.now() % 2520) / 7}, 100%, 50%)`)
-                    : msg.color;
-                let barY = ((-height-vspacing)*offset + nameplateOffset + vspacing)
-                drawBar(x - msg.len / 2, x + msg.len / 2, barY, height, fill);
-                ctx.globalAlpha = .15
-                drawBar(x - msg.len / 2, x + msg.len / 2, barY, height, "#000000");
-                ctx.globalAlpha = 1
-
-
-                ctx.fillStyle = "#000000";
-                drawText(msg.text, x, barY+((height-padding)*0.35), (size * nameRatio)-padding, "#E4EBE7", "center", false, 1, stroke, ctx, font);
-
-                ctx.globalAlpha = 1;
-            }
-
-
-
-        }
     }
     window.requestAnimFrame = function () {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
@@ -8557,10 +7833,8 @@ function RememberScriptingIsBannable() {
         return window.cancelAnimationFrame || window.mozCancelAnimationFrame;
     }();
     let gameDraw = function () {
-        let upgradeBarSpeed = 0.4;
-        let statMenu = Smoothbar(0, 0.075),
-            upgradeMenu = Smoothbar(0, 0.25),
-            statBars = [Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed), Smoothbar(0, upgradeBarSpeed)]
+        let statMenu = Smoothbar(0, .7, 1.5),
+            upgradeMenu = Smoothbar(0, 2, 3);
 
         function graph() {
             let data = [];
@@ -8699,7 +7973,7 @@ function RememberScriptingIsBannable() {
 
         function drawMobileButton(i, x, y, w, h, text) {
             ctx.save();
-            ctx.globalAlpha = 1;
+            ctx.globalAlpha = .4;
             ctx.translate(x, y);
             ctx.fillStyle = getColor(i ? 7 : 11);
             ctx.fillRect(0, 0, w, h);
@@ -8729,6 +8003,11 @@ function RememberScriptingIsBannable() {
                 let motion = compensation();
                 GRAPHDATA = motion.getPrediction();
                 //if (config.prediction === 2) {
+                if (_config.centerTank && (_global.handledScopeChange !== _global.isScoping)) {
+                    _global.handledScopeChange = _global.isScoping;
+                    _player._renderx = _player._cx;
+                    _player._rendery = _player._cy;
+                };
                 _player._renderx = motion.predict(_player._renderx, _player._cx, 0, 0);
                 _player._rendery = motion.predict(_player._rendery, _player._cy, 0, 0);
                 /*} else {
@@ -8741,12 +8020,12 @@ function RememberScriptingIsBannable() {
                 ctx.clearRect(0, 0, _global._screenWidth, _global._screenHeight);
                 _clearScreen(mixColors(color.white, color.guiblack, 0.15), 1);
                 ctx.globalAlpha = 1;
-                const TAU = Math.PI * 2;
-                if (_global._mapType !== 1) {
+                if (_global._mapType === 0) {
                     let W = roomSetup[0].length,
                         H = roomSetup.length,
                         i = 0;
                     ctx.globalAlpha = 1;
+                    let iscv = _global.gamemodeAlteration === "cv";
                     for (let j = 0; j < roomSetup.length; j++) {
                         let row = roomSetup[j],
                             k = 0;
@@ -8758,40 +8037,35 @@ function RememberScriptingIsBannable() {
                                 bottom = Math.min(_global._screenHeight, ratio * (i + 1) * _global._gameHeight / H - py + _global._screenHeight / 2);
                             k++;
                             if (cell === "edge") continue;
-                            ctx.fillStyle = mixColors(color.white, getZoneColor(cell, 1), 0.3, 0);
+                            ctx.fillStyle = mixColors(color.white, getZoneColor(cell, 1), 0.3, iscv ? Math.min(1, (Math.abs(roomSetup.length / 2 - j) / (roomSetup.length / 2)) * .5 + (Math.abs(row.length / 2 - l) / (row.length / 2)) * .5) : 0);
                             ctx.fillRect(left - 1, top - 1, right - left + 2, bottom - top + 2);
                         }
                         i++;
                     }
-                } else if (_global._mapType === 1) {
-                    const xx = -px + _global._screenWidth / 2 + ratio * _global._gameWidth / 2;
-                    const yy = -py + _global._screenHeight / 2 + ratio * _global._gameHeight / 2;
-                    const radius = ratio * _global._gameWidth / 2;
-                    ctx.fillStyle = color.white;
+                } else {
                     ctx.globalAlpha = 1;
+                    ctx.fillStyle = color.white;
                     ctx.beginPath();
-                    ctx.arc(xx, yy, radius, 0, TAU);
+                    ctx.arc(-px + _global._screenWidth / 2 + ratio * _global._gameWidth / 2, -py + _global._screenHeight / 2 + ratio * _global._gameHeight / 2, ratio * _global._gameWidth / 2, 0, 2 * Math.PI);
                     ctx.closePath();
                     ctx.fill();
                 }
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = color.guiblack;
-                ctx.globalAlpha = 0.05;
-                let gridsize = 30 * ratio;//(Math.min(_global._gameWidth, _global._gameHeight) / roomSetup.length / 14 * ratio);
+                ctx.globalAlpha = 0.04;
+                let gridsize = Math.min(_global._gameWidth, _global._gameHeight) / roomSetup.length / 14 * ratio;
+                ctx.beginPath();
                 for (let x = (_global._screenWidth / 2 - px) % gridsize; x < _global._screenWidth; x += gridsize) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, _global._screenHeight | 0);
-                    ctx.stroke();
+                    ctx.moveTo(x | 0, 0);
+                    ctx.lineTo(x | 0, _global._screenHeight | 0);
                 }
-
-
+                ctx.stroke();
+                ctx.beginPath();
                 for (let y = (_global._screenHeight / 2 - py) % gridsize; y < _global._screenHeight; y += gridsize) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(_global._screenWidth, y);
-                    ctx.stroke();
+                    ctx.moveTo(0, y | 0);
+                    ctx.lineTo(_global._screenWidth | 0, y | 0);
                 };
+                ctx.stroke();
                 /*ctx.beginPath();
                 let gridsize =  * ratio;
                 for (let x = (_global.screenWidth / 2 - px) % gridsize; x < _global.screenWidth; x += gridsize) {
@@ -8813,7 +8087,7 @@ function RememberScriptingIsBannable() {
 
             } {
                 let frameplate = [];
-                ctx.translate(_global._screenWidth / 2, _global._screenHeight / 2);
+                particles
                 for (let i = 0; i < entities.length; i++) {
                     let instance = entities[i];
                     if (!instance.render.draws) continue;
@@ -8849,19 +8123,20 @@ function RememberScriptingIsBannable() {
                         _player.y = y;
                         _player._rendershiftx = _global.controllingSquadron ? 0 : x;
                         _player._rendershifty = _global.controllingSquadron ? 0 : y;
-                        // Ok                        // Set facing
+                        // Ok
+                        if (_config.centerTank && !_global.isScoping) x = y = 0;
+                        // Set facing
                         instance.render.f = (!instance.twiggle && !_global._died && !_global._forceTwiggle) ? Math.atan2(_global._target._y - y, _global._target._x - x) : motion.predictFacing(instance.render.f, instance.facing);
                         // Save information about the player
                         _player._nameColor = instance.nameColor
                         //console.log(mockups[instance.index])
-                        _player._name = instance.name == null ? _mockups.get(instance.index).name : instance.name;
-                        _player._label = instance.label
+                        _player._name = instance.name == null ? _mockups[instance.index].name : instance.name;
                         _player._canSeeInvisible = instance.seeInvisible;
                         if (instance.alpha < 0.1) _rewardManager._unlockAchievement("sneak_100");
                     } else {
                         instance.render.f = motion.predictFacing(instance.render.f, instance.facing);
                     };
-
+                    
                     ctx.globalAlpha = 1;
                     instance.render.size = _config.lerpSize ? lerp(instance.render.size, instance.size, 0.2) : instance.size;
                     // Empty bars
@@ -8869,6 +8144,9 @@ function RememberScriptingIsBannable() {
                         instance.render.health.set(0);
                         instance.render.shield.set(0);
                     }
+                    // Center it
+                    x += _global._screenWidth / 2;
+                    y += _global._screenHeight / 2;
                     drawEntity(x, y, instance, ratio, _player._canSeeInvisible ? instance.alpha + .5 : instance.alpha, 1.1, instance.render.f);
                     if ((instance.nameplate || instance.drawsHealth) && !_config.screenshotMode) frameplate.push([x, y, instance, ratio, _player._canSeeInvisible ? instance.alpha + .5 : instance.alpha]);
                     ctx.globalAlpha = 1;
@@ -8880,16 +8158,15 @@ function RememberScriptingIsBannable() {
                     drawHealth(...frameplate[i]);
                     ctx.globalAlpha = 1;
                 };
-                ctx.translate(_global._screenWidth / -2, _global._screenHeight / -2);
             }
-            ratio = _util._getScreenRatio();
+            if (!_global.mobile) ratio = _util._getScreenRatio();
             let scaleScreenRatio = (by, unset) => {
                 _global._screenWidth /= by;
                 _global._screenHeight /= by;
                 ctx.scale(by, by);
                 if (!unset) ratio *= by;
             };
-            scaleScreenRatio(ratio, true);
+            if (!_global.mobile) scaleScreenRatio(ratio, true);
             // Draw GUI
             let t = {
                 x: _global._target._x + _global._screenWidth / 2,
@@ -8899,7 +8176,56 @@ function RememberScriptingIsBannable() {
             let spacing = 20;
 
             if (!_config.screenshotMode) {
-                {
+                { // Joysticks
+                    if (_global.mobile) {
+                        {
+                            let radius = Math.min(_global._screenWidth * 0.6, _global._screenHeight * 0.12);
+                            ctx.globalAlpha = 0.3;
+                            ctx.fillStyle = "#ffffff";
+                            ctx.beginPath();
+                            ctx.arc((_global._screenWidth * 1) / 6, (_global._screenHeight * 2) / 3, radius, 0, 2 * Math.PI);
+                            ctx.arc((_global._screenWidth * 5) / 6, (_global._screenHeight * 2) / 3, radius, 0, 2 * Math.PI);
+                            ctx.fill();
+                            for (let i = 0; i < 4; i++) {
+                                const angle = Math.PI * 2 / 4 * i;
+                                ctx.strokeStyle = "#dddddd";
+                                ctx.lineWidth = radius * 0.125;
+                                ctx.beginPath();
+                                ctx.save();
+                                ctx.translate((_global._screenWidth * 1) / 6, (_global._screenHeight * 2) / 3);
+                                ctx.moveTo(Math.cos(angle) * radius * 0.2, Math.sin(angle) * radius * 0.2);
+                                ctx.lineTo(Math.cos(angle) * radius * 0.8, Math.sin(angle) * radius * 0.8);
+                                ctx.restore();
+                                ctx.closePath();
+                                ctx.stroke();
+                                ctx.beginPath();
+                                ctx.save();
+                                ctx.translate((_global._screenWidth * 5) / 6, (_global._screenHeight * 2) / 3);
+                                ctx.moveTo(Math.cos(angle) * radius * 0.2, Math.sin(angle) * radius * 0.2);
+                                ctx.lineTo(Math.cos(angle) * radius * 0.8, Math.sin(angle) * radius * 0.8);
+                                ctx.restore();
+                                ctx.closePath();
+                                ctx.stroke();
+                            }
+                        }
+                        const size = spacing * 2;
+                        drawMobileButton(0, spacing, _global._screenHeight - spacing - size, size, size, _global._mobileOptions ? "X" : "+");
+                        if (_global._mobileOptions) {
+                            const offX = spacing + (size * 2);
+                            const offY = spacing + size;
+                            const x = spacing * 2 + size;
+                            const y = _global._screenHeight - spacing - size;
+                            drawMobileButton(1, x, y - offY, size * 2, size, "Level Up");
+                            drawMobileButton(2, x + offX, y - offY, size * 2, size, "Testbed");
+                            drawMobileButton(6, x + offX * 2, y - offY, size * 2, size, "Control Point");
+                            drawMobileButton(3, x, y, size * 2, size, "Autofire");
+                            drawMobileButton(4, x + offX, y, size * 2, size, "Autospin");
+                            drawMobileButton(5, x + offX * 2, y, size * 2, size, "Override");
+                            drawMobileButton(7, x + offX * 3, y, size * 2, size, "Reset Tank");
+                            drawMobileButton(8, x + offX * 3, y - offY, size * 2, size, "Q Key");
+                        }
+                    }
+                } {
                     do {
                         _global.clickables.tree.hide();
                         if (!_global._showTree) break;
@@ -8944,7 +8270,7 @@ function RememberScriptingIsBannable() {
                         // Bounds
                         if (_global._scrollX < 0) _global._scrollX = 0;
                         if (_global._scrollX > 1) _global._scrollX = 1;
-                        _global.doParseTree(_mockups, _global);
+                        if (_global.parsedTreeData instanceof Function) _global.parsedTreeData(_mockups, _global);
                         /*ctx.strokeStyle = color.black;
                         ctx.globalAlpha = 1;
                         ctx.lineWidth = 4;
@@ -8997,7 +8323,7 @@ function RememberScriptingIsBannable() {
                                 ctx.globalAlpha = 1;
                                 let angle = -Math.PI / 4,
                                     picture = getEntityImageFromMockup(index, _gui._color),
-                                    position = _mockups.get(index).position,
+                                    position = _mockups[index].position,
                                     scale = .8 * realSize / position.axis,
                                     xx = ax + .5 * realSize - scale * position.middle.x * Math.cos(angle),
                                     yy = ay + .5 * realSize - scale * position.middle.x * Math.sin(angle);
@@ -9026,7 +8352,7 @@ function RememberScriptingIsBannable() {
                                     ctx.globalAlpha = 1;
                                     let angle = -Math.PI / 4,
                                         picture = getEntityImageFromMockup(index, _gui._color),
-                                        position = _mockups.get(index).position,
+                                        position = _mockups[index].position,
                                         scale = .9 * realSize / position.axis,
                                         xx = t.x - scale * position.middle.x * Math.cos(angle),
                                         yy = t.y - 110 - scale * position.middle.x * Math.sin(angle);
@@ -9093,23 +8419,60 @@ function RememberScriptingIsBannable() {
                 _gui._skill.update();
                 if (_global.mobile) scaleScreenRatio(1.4);
 
+                {
+                    if (!_config.disableMessages) {
+                        let vspacing = 4,
+                            height = 18,
+                            x = _global._screenWidth / 2,
+                            y = 20,
+                            fill;
+                        if (_global.mobile) y += (_global.canSkill ? ((alcoveSize / 3 + spacing) / 1.4) * statMenu.get() : 0) + (_global.canUpgrade ? ((alcoveSize / 2 + spacing) / 1.4) * upgradeMenu.get() : 0);
+                        for (let i = _messages.length - 1; i >= 0; i--) {
+                            let msg = _messages[i],
+                                txt = msg.text,
+                                text = txt;
+                            //if (msg.len == null || msg.font !== config.fontFamily) {
+                            msg.len = measureText(text, height - 4);
+                            //msg.font = config.fontFamily;
+                            //};
+                            ctx.globalAlpha = .5 * msg.alpha;
+                            fill = msg.color === "rainbow" ? _util._HSL2COLOR(`hsl(${(Date.now() % 2520) / 7}, 100%, 50%)`) : msg.color;
+                            drawBar(x - msg.len / 2, x + msg.len / 2, y + height / 2, height, fill);
+                            ctx.globalAlpha = Math.min(1, msg.alpha);
+                            drawText(text, x, y + height / 2, height - 4, color.guiwhite, "center", 1);
+                            y += vspacing + height;
+                            if (msg.status > 1) y -= (vspacing + height) * (1 - Math.sqrt(msg.alpha));
+                            if (msg.status > 1) {
+                                msg.status -= .05;
+                                msg.alpha += .05;
+                            } else if (i === 0 && (_messages.length > 6 || Date.now() - msg.time > 1e4)) {
+                                let mult = _messages.length > 15 ? 5 : 1;
+                                msg.status -= .05 * mult;
+                                msg.alpha -= .05 * mult;
+                                if (msg.alpha <= 0 || _messages.length > 40) {
+                                    _messages.splice(0, 1);
+                                }
+                            }
+                        }
+                        ctx.globalAlpha = 1;
+                    }
+                }
+
                 if (!_global._showTree) {
                     if (_global.mobile) scaleScreenRatio(1 / 1.4); {
                         if (!_global.mobile) {
                             _global.canSkill = !!_gui._points && _gui._skills.some(skill => skill.amount < skill.cap);
-                            let active = (_global.canSkill || _global._died || _global.statHover)
-                            statMenu.set(0 + active);
+                            statMenu.set(0 + (_global.canSkill || _global._died || _global.statHover));
                             _global.clickables.stat.hide();
                             let spacing = 4,
                                 height = 15,
                                 gap = 35,
                                 len = alcoveSize,
-                                savedLen = len,
-                                save = _config.fancyAnimations ? len * statMenu.get() : len,
+                                save = len,
+                                x = -20 - 2 * len + statMenu.get() * (2 * 20 + 2 * len),
+                                y = _global._screenHeight - 20 - height,
                                 ticker = 11,
-                                namedata = _gui._getStatNames(_mockups.get(_gui._type).statnames || -1);
-                                let y = _global._screenHeight - 20 - height
-                                let x = -20 - 2 * len + (_config.fancyAnimations ? statMenu.get() : active) * (2 * 20 + 2 * len)
+                                namedata = _gui._getStatNames(_mockups[_gui._type].statnames || -1);
                             _gui._skills.forEach(function drawSkillBar(skill) {
                                 ticker--;
                                 let name = namedata[ticker - 1],
@@ -9117,7 +8480,6 @@ function RememberScriptingIsBannable() {
                                     col = color[skill.color],
                                     cap = skill.softcap,
                                     maxLevel = skill.cap;
-                                    statBars[ticker - 1].set(ska(level))
                                 if (cap) {
                                     len = save;
                                     let _max = _config.expectedMaxSkillLevel,
@@ -9126,7 +8488,7 @@ function RememberScriptingIsBannable() {
                                     if (extension) _max = cap;
                                     drawBar(x + height / 2, x - height / 2 + len * ska(cap), y + height / 2, height - 3 + _config.barChunk, color.black);
                                     drawBar(x + height / 2, x + height / 2 + (len - gap) * ska(cap), y + height / 2, height - 3, color.grey);
-                                    drawBar(x + height / 2, x + height / 2 + ((len - gap) * statBars[ticker - 1].get()), y + height / 2, height - 3.5, col);
+                                    drawBar(x + height / 2, x + height / 2 + (len - gap) * ska(level), y + height / 2, height - 3.5, col);
                                     if (blocking) {
                                         ctx.lineWidth = 1;
                                         ctx.strokeStyle = color.grey;
@@ -9144,7 +8506,7 @@ function RememberScriptingIsBannable() {
                                     y -= height + spacing;
                                 }
                             });
-                            _global.clickables.hover.place(0, 0, y, .8 * savedLen, .8 * (_global._screenHeight - y));
+                            _global.clickables.hover.place(0, 0, y, .8 * len, .8 * (_global._screenHeight - y));
                             if (_gui._points !== 0) drawText("x" + _gui._points, Math.round(x + len - 2) + .5, Math.round(y + height - 4) + .5, 20, color.guiwhite, "right");
                         }
                     } {
@@ -9159,7 +8521,7 @@ function RememberScriptingIsBannable() {
                         drawBar(x, x + len, y + height / 2, height - 3 + _config.barChunk, color.black);
                         drawBar(x, x + len, y + height / 2, height - 3, color.grey);
                         drawBar(x, x + len * (level > 59 ? 1 : _gui._skill.getProgress()), y + height / 2, height - 3.5, color.gold);
-                        drawText("Level " + level + " " + _player._label, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", 1);
+                        drawText("Level " + level + " " + _mockups[_gui._type].name, x + len / 2, y + height / 2, height - 4, color.guiwhite, "center", 1);
                         height = 14;
                         y -= height + spacing;
                         drawBar(x + len * .1, x + len * .9, y + height / 2, height - 3 + _config.barChunk, color.black);
@@ -9185,7 +8547,7 @@ function RememberScriptingIsBannable() {
                             }
                         }
                         if (_global.displayTextUI.enabled) {
-                            drawText(_global.displayTextUI.text, Math.round(x + len / 2) + .5, Math.round(y - 55 - spacing), 16, _global.displayTextUI.color, "center", true);
+                            drawText(_global.displayTextUI.text, Math.round(x + len / 2) + .5, Math.round(y - 55 - spacing), 16, color.guiwhite, "center", true);
                         }
                     }
                     if (_global.mobile) scaleScreenRatio(0.8); {
@@ -9213,12 +8575,12 @@ function RememberScriptingIsBannable() {
                             h = roomSetup.length,
                             i = 0;
                         ctx.globalAlpha = .6;
-                        if (_global._mapType !== 1) {
+                        if (_global._mapType === 0) {
                             for (let j = 0; j < roomSetup.length; j++) {
                                 let row = roomSetup[j],
                                     k = 0;
                                 for (let m = 0; m < row.length; m++) {
-                                    ctx.fillStyle = getZoneColor(row[m], 0, Math.min(1, (Math.abs(roomSetup.length / 2 - j) / (roomSetup.length / 2)) * .5 + (Math.abs(row.length / 2 - m) / (row.length / 2)) * .5));
+                                    ctx.fillStyle = getZoneColor(row[m], 0, Math.min(1, (Math.abs(roomSetup.length / 2 - j) / (roomSetup.length / 2)) * .5 + (Math.abs(row.length / 2 - m) / (row.length / 2)) * .5));                    
                                     drawGuiRect(x + k++ * len / w, y + i * height / h, len / w, height / h);
                                 }
                                 i++;
@@ -9226,7 +8588,7 @@ function RememberScriptingIsBannable() {
                         }
                         ctx.fillStyle = mixColors(color.grey, "#000000", 0.1);
                         let box = [x, y, len, height];
-                        _global._mapType === 1 ? drawGuiCircle(box[0] + box[2] / 2, box[1] + box[2] / 2, box[2] / 2, 0) : drawGuiRect(...box);
+                        _global._mapType === 0 ? drawGuiRect(...box) : drawGuiCircle(box[0] + box[2] / 2, box[1] + box[2] / 2, box[2] / 2, 0);
                         _gui._minimap._display = _gui._minimap._display.filter(entry => _gui._minimap._server.findIndex(real => real.id === entry.id) > -1);
                         for (let real of _gui._minimap._server) {
                             let index = _gui._minimap._display.findIndex(old => real.id === old.id);
@@ -9279,11 +8641,7 @@ function RememberScriptingIsBannable() {
                         ctx.fillStyle = color.guiblack;
                         if (!_global._died) {
                             if (_config.prediction === 2 || true) {
-                                let xAdder = (_player._cx * (rawRatio[0] ? 1 : rawRatio[2])) / _global._gameWidth * len - 1
-                                let yAdder = (_player._cy * (rawRatio[0] ? rawRatio[1] : 1)) / _global._gameWidth * height - 1
-                                if (xAdder > 0 && yAdder > 0 && xAdder < 200 && yAdder < 200) {
-                                    drawGuiCircle(x + xAdder, y + yAdder, 2);
-                                }
+                                drawGuiCircle(x + (_player._cx * (rawRatio[0] ? 1 : rawRatio[2])) / _global._gameWidth * len - 1, y + (_player._cy * (rawRatio[0] ? rawRatio[1] : 1)) / _global._gameWidth * height - 1, 2);
                             } else {
                                 drawGuiCircle(x + _player._x / _global._gameWidth * len - 1, y + _player.y / _global._gameWidth * height - 1, 2);
                             }
@@ -9307,7 +8665,7 @@ function RememberScriptingIsBannable() {
                         
                         drawText((servers[selectedServer] || { location: "null" }).location, x + len, y - 8, 10, color.guiwhite, "right");*/
                         y -= 8;
-                        drawText(location.hostname, x + len, y, 18, "#B6E57C", "right");
+                        drawText("HOLY SHIT WHY IS IT RUNNING ON GLITCH???", x + len, y, 18, "#B6E57C", "right");
                         y -= 18;
                         if (_global._debug > 1) {
                             drawText("ClientFPS: " + metrics._rendertime, x + len, y, 14, metrics._rendertime > 15 ? color.guiwhite : color.orange, "right");
@@ -9321,42 +8679,25 @@ function RememberScriptingIsBannable() {
                                 y -= 16;
                                 drawText("Update Rate: " + metrics._updatetime + "Hz", x + len, y, 14, color.guiwhite, "right");
                                 if (_global._debug > 3) {
-                                    y -= 16
-                                    drawText(`Server MEM usage: ${metrics._serverMemUsage.toFixed(2)}%`, x + len, y, 14, metrics._serverMemUsage > 90 ? color.red : metrics._serverMemUsage > 70 ? color.orange : color.guiwhite, "right")
-                                    y -= 16
-                                    drawText(`Server CPU usage: ${metrics._serverCpuUsage.toFixed(2)}%`, x + len, y, 14, metrics._serverCpuUsage > 80 ? color.red : metrics._serverCpuUsage > 65 ? color.orange : color.guiwhite, "right")
-                                    y -= 16
-                                    drawText(`${_mockups._fetchedMockups}/${_mockups._totalMockups} (${((_mockups._fetchedMockups/_mockups._totalMockups)*100).toFixed(2)}%) Mockups`, x + len, y, 14, color.guiwhite, "right")
-                                    if (_global._debug > 4) {
-                                        ctx.fillStyle = color.guiblack
-                                        drawGuiRect(...box);
-                                        ctx.globalAlpha = 0.4;
-                                        lagGraph(lag.get(), ...box, color.blue);
-                                        gapGraph(metrics._rendergap, ...box, color.green);
-                                        timingGraph(GRAPHDATA, ...box, color.red);
-                                        bullshitGraph(Math.random(), ...box, "#FFFFA0");
-                                        ctx.globalAlpha = 1;
-                                        drawText("REN", box[0] + 6, box[1] + 18, 14, color.green, "left");
-                                        drawText("LAG", box[0] + 6, box[1] + 40, 14, color.blue, "left");
-                                        drawText("STR", box[0] + 6, box[1] + 62, 14, color.red, "left");
-                                        drawText("BSH", box[0] + 6, box[1] + 84, 14, "#FFFFA0", "left");
-                                    }
+                                    ctx.fillStyle = color.guiblack
+                                    drawGuiRect(...box);
+                                    ctx.globalAlpha = 0.4;
+                                    lagGraph(lag.get(), ...box, color.blue);
+                                    gapGraph(metrics._rendergap, ...box, color.green);
+                                    timingGraph(GRAPHDATA, ...box, color.red);
+                                    bullshitGraph(Math.random(), ...box, "#FFFFA0");
+                                    ctx.globalAlpha = 1;
+                                    drawText("REN", box[0] + 6, box[1] + 18, 14, color.green, "left");
+                                    drawText("LAG", box[0] + 6, box[1] + 40, 14, color.blue, "left");
+                                    drawText("STR", box[0] + 6, box[1] + 62, 14, color.red, "left");
+                                    drawText("BSH", box[0] + 6, box[1] + 84, 14, "#FFFFA0", "left");
                                 }
                             }
                         }
                         ctx.lineWidth = 4;
                         ctx.strokeStyle = color.black;
                         //drawGuiRect(...box, 1);
-                        switch (_global._mapType) {
-                            case 1:
-                                drawGuiCircle(box[0] + box[2] / 2, box[1] + box[2] / 2, box[2] / 2, 1)
-                                break;
-                            case 3:
-                                drawGUIPolygon(box[0] + box[2] / 2, box[1] + box[2] / 2, box[2] / 2, 3, 1);
-                                break;
-                            default:
-                                drawGuiRect(...box, 1);
-                        }
+                        _global._mapType === 0 ? drawGuiRect(...box, 1) : drawGuiCircle(box[0] + box[2] / 2, box[1] + box[2] / 2, box[2] / 2, 1);
                     }
                     if (_global.mobile) {
                         scaleScreenRatio(1 / 0.8);
@@ -9368,6 +8709,7 @@ function RememberScriptingIsBannable() {
                             let height = 14;
                             let x = _global._screenWidth - len - spacing;
                             let y = spacing + height + 7;
+                            if (_global.mobile) y += (_global.canSkill ? (alcoveSize / 3 / 1.4) * statMenu.get() : 0) + (_global.canUpgrade && spacing * 2 + _gui._upgrades.length * (alcoveSize * 0.5 + 14) > x * 1.4 ? (alcoveSize / 2 / 1.4) * upgradeMenu.get() : 0);
                             drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 4, color.guiwhite, 'center');
                             _gui._leaderboard._display = _gui._leaderboard._display.filter(entry => _gui._leaderboard._server.findIndex(real => real.id === entry.id) > -1);
                             for (let real of _gui._leaderboard._server) {
@@ -9415,53 +8757,186 @@ function RememberScriptingIsBannable() {
                                 y += vspacing + height;
                             }
                         }
-                    }
-                    {
-                        if (!_config.disableMessages) {
-                            let vspacing = 4,
-                                height = 18,
-                                x = _global._screenWidth / 2,
-                                y = 20,
-                                fill;
-                            if (_global.mobile) y += (_global.canSkill ? ((alcoveSize / 3 + spacing) / 1.4) * statMenu.get() : 0) + (_global.canUpgrade ? ((alcoveSize / 2 + spacing) / 1.4) * upgradeMenu.get() : 0);
-                            for (let i = _messages.length - 1; i >= 0; i--) {
-                                let msg = _messages[i],
-                                    txt = msg.text,
-                                    text = txt;
-                                //if (msg.len == null || msg.font !== config.fontFamily) {
-                                msg.len = measureText(text, height - 4);
-                                //msg.font = config.fontFamily;
-                                //};
-                                ctx.globalAlpha = _config.fancyAnimations ? .5 * msg.alpha : 0.5;
-                                fill = msg.color === "rainbow" ? _util._HSL2COLOR(`hsl(${(Date.now() % 2520) / 7}, 100%, 50%)`) : msg.color;
-                                drawBar(x - msg.len / 2, x + msg.len / 2, y + height / 2, height, fill);
-                                ctx.globalAlpha = _config.fancyAnimations ? Math.min(1, msg.alpha) : 1;
-                                drawText(text, x, y + height / 2, height - 4, color.guiwhite, "center", 1);
-                                y += vspacing + height;
-                                if (_config.fancyAnimations && msg.status > 1) y -= (vspacing + height) * (1 - Math.sqrt(msg.alpha));
-                                if (msg.status > 1) {
-                                    msg.status -= .05;
-                                    msg.alpha += .05;
-                                } else if (i === 0 && (_messages.length > 6 || Date.now() - msg.time > 1e4)) {
-                                    let mult = _messages.length > 15 ? 5 : 1;
-                                    msg.status -= .05 * mult;
-                                    msg.alpha -= .05 * mult;
-                                    if (msg.alpha <= 0 || _messages.length > 40) {
-                                        _messages.splice(0, 1);
-                                    }
+                    } { // Submarine UI
+                        let y = _global._screenHeight / 3;
+                        if (_global.submarineUI.enabled) {
+                            drawText(`Air supply: ${_global.submarineUI.air}s`, _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, _global.submarineUI.air < 10 ? color.red : _global.submarineUI.air < 15 ? color.gold : color.guiwhite, "left", true);
+                            y += 20;
+                            drawText(_global.submarineUI.submerged ? "You are vulnerable only to other submarines" : "You are vulnerable to everything on the surface", _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, color.red, "left", true);
+                            y += 20;
+                            drawText(_global.submarineUI.submerged ? "Press . to surface" : "Press . to submerge", _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, color.orange, "left", true);
+                            if (!!_global.submarineUI.hydro) {
+                                if (_global.submarineUI.hydro.enabled) {
+                                    y += 20;
+                                    drawText("Hydroacoustic search enabled", _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, color.green, "left", true);
+                                    y += 20;
+                                    drawText(_global.submarineUI.hydro.time + " seconds remaining", _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, (_global.submarineUI.hydro.time < _global.submarineUI.hydro.duration * .175) ? color.red : (_global.submarineUI.hydro.time < _global.submarineUI.hydro.duration * .25) ? color.gold : color.guiwhite, "left", true);
+                                } else {
+                                    y += 20;
+                                    drawText("Hydroacoustic search " + (_global.submarineUI.hydro.time === _global.submarineUI.hydro.duration ? "disabled" : "on cooldown"), _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, color.red, "left", true);
+                                    y += 20;
+                                    drawText(_global.submarineUI.hydro.time < _global.submarineUI.hydro.duration ? "Cooldown: " + (_global.submarineUI.hydro.duration - _global.submarineUI.hydro.time) + "s" : "Press , to enable hydro", _global._screenWidth / 2 + _global._screenWidth / 10, y, 12.5, color.gold, "left", true);
                                 }
                             }
                         }
+                    } { // Carrier UI
+                        _global.clickables.carrier.hide();
+                        _global.clickables.toggleStrikeCarrier.hide();
+                        if (_global.strikeCarrierUI.enabled) {
+                            {
+                                const len = 200 / 3;
+                                let x = _global._screenWidth - ((200 - len) * 2) - spacing * 2;
+                                let y = _global._screenHeight - ((200 - len) / 2) - spacing;
+                                ctx.fillStyle = color.grey;
+                                ctx.strokeStyle = color.black;
+                                ctx.lineWidth = len / 20;
+                                drawGuiRect(x, y, len, len, false);
+                                drawGuiRect(x, y, len, len, true);
+                                drawText(_global.strikeCarrierUI.expand ? "Close" : "Open", x + len / 2, y + len / 2 + 7, 15, color.guiwhite, "center");
+                                _global.clickables.toggleStrikeCarrier.place(0, x, y, len, len);
+                            }
+                            if (_global.strikeCarrierUI.expand) {
+                                let size = _global._screenHeight - spacing * 2,
+                                    x = _global._screenWidth / 2 - size / 2,
+                                    y = spacing,
+                                    w = roomSetup[0].length,
+                                    h = roomSetup.length,
+                                    i = 0;
+                                ctx.globalAlpha = .5;
+                                for (let j = 0; j < roomSetup.length; j++) {
+                                    let row = roomSetup[j],
+                                        k = 0;
+                                    for (let m = 0; m < row.length; m++) {
+                                        ctx.fillStyle = getZoneColor(row[m], 0, Math.min(1, (Math.abs(roomSetup.length / 2 - j) / (roomSetup.length / 2)) * .5 + (Math.abs(row.length / 2 - m) / (row.length / 2)) * .5));
+                                        drawGuiRect(x + k++ * size / w, y + i * size / h, size / w, size / h);
+                                    }
+                                    i++;
+                                }
+                                ctx.strokeStyle = color.black;
+                                ctx.lineWidth = 2;
+                                for (let entity of _gui._minimap._display) {
+                                    ctx.fillStyle = mixColors(getColor(entity.color), color.black, 0.3);
+                                    ctx.globalAlpha = 1;
+                                    switch (entity.type) {
+                                        case 3: {
+                                            drawGuiRect(x + ((entity.x - 8) / _global._gameWidth) * size, y + ((entity.y - 8) / _global._gameHeight) * size, 8, 8);
+                                        }
+                                            break;
+                                        case 2: {
+                                            const width = entity.size * (entity.width || 1);
+                                            const hgt = entity.size * (entity.height || 1);
+                                            drawGuiRect(x + ((entity.x - width) / _global._gameWidth) * size - 0.4, y + ((entity.y - hgt) / _global._gameHeight) * size - 1, ((2 * width) / _global._gameWidth) * size + 0.2, ((2 * hgt) / _global._gameWidth) * size + 0.2);
+                                        }
+                                            break;
+                                        case 1: {
+                                            drawGuiCircle(x + (entity.x / _global._gameWidth) * size, y + (entity.y / _global._gameHeight) * size, (entity.size / _global._gameWidth) * size + 0.2);
+                                        }
+                                            break;
+                                        case 0: {
+                                            if (entity.id !== _gui._playerid) drawGuiCircle(x + (entity.x / _global._gameWidth) * size, y + (entity.y / _global._gameHeight) * size, 4);
+                                        }
+                                            break;
+                                    }
+                                }
+                                ctx.lineWidth = 0;
+                                _global.strikeCarrierUI.map = {
+                                    x: x * _global._ratio,
+                                    y: y * _global._ratio,
+                                    size: size * _global._ratio
+                                }
+                                const buttonNames = {
+                                    "rocket": "Rocket Bombers",
+                                    "diveBomb": "Dive Bombers",
+                                    "carpetBomb": "Carpet Bombers",
+                                    "skipBomb": "Skip Bombers",
+                                    "torpedo": "Torpedo Bombers",
+                                    "fighter": "Fighters",
+                                    "mine": "Mine Bombers"
+                                };
+                                x = spacing * 4;
+                                y = spacing * 4;
+                                size = spacing * 4;
+                                ctx.globaAlpha = .6;
+                                _global.strikeCarrierUI.buttons = [];
+                                for (let squadronType in _global.strikeCarrierUI.data) {
+                                    let squadrons = _global.strikeCarrierUI.data[squadronType];
+                                    let i = 0;
+                                    for (let button of squadrons) {
+                                        let meSelected = squadronType === _global.strikeCarrierUI.selection[0] && i === _global.strikeCarrierUI.selection[1];
+                                        if (meSelected && button > 0) {
+                                            meSelected = false;
+                                            _global.strikeCarrierUI.selection = [-1, -1];
+                                        }
+                                        ctx.fillStyle = meSelected ? color.vlgrey : color.grey;
+                                        ctx.strokeStyle = meSelected ? color.grey : color.black;
+                                        ctx.lineWidth = size / 20;
+                                        drawGuiRect(x, y, size, size, false);
+                                        drawGuiRect(x, y, size, size, true);
+                                        let fontSize = button > 0 ? size / 3 : size / 6,
+                                            lines = (button > 0 ? `${button}` : buttonNames[squadronType]).split(" ");
+                                        lines.forEach((line, i) => {
+                                            let gap = fontSize * 2;
+                                            let yy = y + (lines.length > 1 ? (size / 1.25 - (gap * (lines.length / 2))) : (size / 1.5)) + (gap * i);
+                                            drawText(line, x + size / 2, yy, fontSize, color.guiwhite, "center");
+                                        });
+                                        _global.strikeCarrierUI.buttons.push({
+                                            x: x * _global._ratio,
+                                            y: y * _global._ratio,
+                                            size: size * _global._ratio,
+                                            selectable: button <= 0,
+                                            selection: [squadronType, i]
+                                        });
+                                        x += size + spacing;
+                                        i++;
+                                    }
+                                    x = spacing * 4;
+                                    y += size + spacing;
+                                }
+                            }
+                        } else if (_global.carrierUI.enabled) {
+                            ctx.globalAlpha = .25;
+                            const len = 200 / 3;
+                            let x = _global._screenWidth - ((200 - len) * 2) - spacing * 2;
+                            let y = _global._screenHeight - ((200 - len) / 2) - spacing;
+                            let ii = 0;
+                            for (let id = 0; id < _global.carrierUI.buttons.length; id++) {
+                                const button = _global.carrierUI.buttons[id];
+                                if (!button.enabled) continue;
+                                ctx.fillStyle = ctx.strokeStyle = getColor(button.color);
+                                drawGuiRect(x, y, len, len);
+                                ctx.fillStyle = color.black;
+                                drawGuiRect(x, y + len * 0.6, len, len * 0.4);
+                                ctx.fillStyle = color.guiblack;
+                                drawGuiRect(x, y, len, len, true);
+                                _global.clickables.carrier.place(id, x, y, len, len);
+                                ctx.globalAlpha = 1;
+                                let fontSize = button.tick > 0 ? len / 3 : len / 6,
+                                    lines = (button.tick > 0 ? `${button.tick}` : button.text).split(" ");
+                                lines.forEach((line, i) => {
+                                    let gap = fontSize * 2;
+                                    let yy = y + (lines.length > 1 ? (len / 1.25 - (gap * (lines.length / 2))) : (len / 1.5));
+                                    yy += gap * i;
+                                    drawText(line, x + len / 2, yy, fontSize, color.guiwhite, "center");
+                                });
+                                ctx.globalAlpha = .25;
+                                x -= len + spacing;
+                                if (ii % 2 === 1) {
+                                    y -= len + spacing;
+                                    x = _global._screenWidth - ((200 - len) * 2) - spacing * 2;
+                                }
+                                ii++;
+                            }
+                            ctx.restore();
+                        }
                     }
-
                     if (_global.mobile) scaleScreenRatio(1 / 1.4); {
                         upgradeMenu.set(0 + (_global.canUpgrade || _global.upgradeHover));
-                        let glide = _config.fancyAnimations?upgradeMenu.get():1;
+                        let glide = upgradeMenu.get();
                         _global.clickables.upgrade.hide();
                         if (_gui._upgrades.length > 0) {
                             _global.canUpgrade = 1;
                             let spacing = 10,
-                                x = 2 * 20 - 20,
+                                x = glide * 2 * 20 - 20,
                                 colorIndex = _global._tankMenuColor,
                                 i = 0,
                                 y = 20,
@@ -9469,15 +8944,13 @@ function RememberScriptingIsBannable() {
                                 x3 = 0,
                                 y2 = y,
                                 ticker = 0,
-                                len = 100 * (_global._screenWidth / innerWidth), //100
+                                len = alcoveSize / 2.05, //100
                                 height = len;
                             //_scale = Math.max(_global.screenWidth, 16 * _global.screenHeight / 9) / (_global.screenWidth <= 1280 ? 1280 : _global.screenWidth >= 1920 ? 1920 : _global.screenWidth);
                             upgradeSpin += .01;
                             for (let model of _gui._upgrades) {
                                 if (y > y2) y2 = y - 60;
                                 x3 = x * 2 + 105;
-                                x *= glide
-                                y *= glide
                                 _global.clickables.upgrade.place(i++, y, x, len, height);
                                 ctx.globalAlpha = .5;
                                 ctx.fillStyle = getColor(colorIndex > 185 ? colorIndex - 85 : colorIndex);
@@ -9497,7 +8970,7 @@ function RememberScriptingIsBannable() {
                                 }
                                 ctx.globalAlpha = 1;
                                 let picture = getEntityImageFromMockup(model, _gui._color),
-                                    position = _mockups.get(model).position,
+                                    position = _mockups[model].position,
                                     scale = .6 * len / position.axis,
                                     xx = y + .5 * height - scale * position.middle.x * Math.cos(upgradeSpin),
                                     yy = x + .5 * len - scale * position.middle.x * Math.sin(upgradeSpin);
@@ -9510,9 +8983,7 @@ function RememberScriptingIsBannable() {
                                 if (++ticker % (_config.useFourRows ? 4 : 3) === 0) {
                                     x = x2;
                                     y += height + spacing;
-                                } else {
-                                    x += (len + spacing);
-                                }
+                                } else x += glide * (len + spacing);
                             }
                             let h = 14,
                                 txt = "Ignore",
@@ -9533,15 +9004,15 @@ function RememberScriptingIsBannable() {
                             // Draw skill bars
                             _global.canSkill = _gui._points > 0 && _gui._skills.some(skill => skill.amount < skill.cap) && !_global.canUpgrade;
                             statMenu.set(0 + (_global.canSkill || _global._died));
-                            let glide = statMenu.get() * (_config.fancyAnimations ? 1 : 0);
+                            let glide = statMenu.get();
                             _global.clickables.stat.hide();
                             let internalSpacing = 14;
-                            let width = alcoveSize / 2.5;
-                            let height = alcoveSize / 2.5;
-                            let x = 2 * spacing - spacing;
+                            let width = alcoveSize / 2;
+                            let height = alcoveSize / 2;
+                            let x = glide * 2 * spacing - spacing;
                             let y = spacing;
                             let index = 0;
-                            let namedata = _gui._getStatNames(_mockups.get(_gui._type).statnames || -1);
+                            let namedata = _gui._getStatNames(_mockups[_gui._type].statnames || -1);
                             if (_global.canSkill) {
                                 _gui._skills.forEach((skill, ticker) => {
                                     let skillCap = skill.softcap;
@@ -9556,7 +9027,7 @@ function RememberScriptingIsBannable() {
                                         skillNameParts.slice(skillNameCut)
                                     ];
                                     // Draw box
-                                    ctx.globalAlpha = 0.9;
+                                    ctx.globalAlpha = 0.5;
                                     ctx.fillStyle = skillColor;
                                     drawGuiRect(x, y, width, (height * 2) / 3);
                                     ctx.globalAlpha = 0.1;
@@ -9593,8 +9064,7 @@ function RememberScriptingIsBannable() {
                                     ctx.lineWidth = 3;
                                     drawGuiLine(x, y + (height * 2) / 3, x + width, y + (height * 2) / 3);
                                     drawGuiRect(x, y, width, height, true);
-                                    x += (width + internalSpacing);
-                                    y *= glide
+                                    x += glide * (width + internalSpacing);
                                     index++;
                                 });
                                 if (_gui._points > 1) {
@@ -9602,83 +9072,9 @@ function RememberScriptingIsBannable() {
                                 }
                             }
                         }
-                    } { // Joysticks
-                        if (_global.mobile) {
-                            {
-                                let radius = Math.min(_global._screenWidth * 0.6, _global._screenHeight * 0.12);
-                                ctx.globalAlpha = 0.3;
-                                ctx.fillStyle = "#ffffff";
-                                ctx.beginPath();
-                                ctx.arc((_global._screenWidth * 1) / 6, (_global._screenHeight * 2) / 3, radius, 0, 2 * Math.PI);
-                                ctx.arc((_global._screenWidth * 5) / 6, (_global._screenHeight * 2) / 3, radius, 0, 2 * Math.PI);
-                                ctx.fill();
-                                for (let i = 0; i < 4; i++) {
-                                    const angle = Math.PI * 2 / 4 * i;
-                                    ctx.strokeStyle = "#dddddd";
-                                    ctx.lineWidth = radius * 0.125;
-                                    ctx.beginPath();
-                                    ctx.save();
-                                    ctx.translate((_global._screenWidth * 1) / 6, (_global._screenHeight * 2) / 3);
-                                    ctx.moveTo(Math.cos(angle) * radius * 0.2, Math.sin(angle) * radius * 0.2);
-                                    ctx.lineTo(Math.cos(angle) * radius * 0.8, Math.sin(angle) * radius * 0.8);
-                                    ctx.restore();
-                                    ctx.closePath();
-                                    ctx.stroke();
-                                    ctx.beginPath();
-                                    ctx.save();
-                                    ctx.translate((_global._screenWidth * 5) / 6, (_global._screenHeight * 2) / 3);
-                                    ctx.moveTo(Math.cos(angle) * radius * 0.2, Math.sin(angle) * radius * 0.2);
-                                    ctx.lineTo(Math.cos(angle) * radius * 0.8, Math.sin(angle) * radius * 0.8);
-                                    ctx.restore();
-                                    ctx.closePath();
-                                    ctx.stroke();
-                                }
-                            }
-                            const size = spacing * 2;
-                            drawMobileButton(0, spacing, _global._screenHeight - spacing - size, size, size, _global._mobileOptions ? "X" : "+");
-                            if (_global._mobileOptions) {
-                                const offX = spacing + (size * 2);
-                                const offY = spacing + size;
-                                const x = spacing * 2 + size;
-                                const y = _global._screenHeight - spacing - size;
-                                drawMobileButton(1, x, y - offY, size * 2, size, "Level Up");
-                                drawMobileButton(2, x + offX, y - offY, size * 2, size, "Testbed");
-                                drawMobileButton(3, x, y, size * 2, size, "Override");
-                                drawMobileButton(4, x + offX, y, size * 2, size, "Reset Tank");
-                                drawMobileButton(5, x + offX * 2, y, size * 2, size, "Full Screen");
-                                drawMobileButton(6, x + offX * 2, y - offY, size * 2, size, _global._mobileChatText);
-                            }else{
-                                let x = spacing + size * 1.5
-                                let y = _global._screenHeight - spacing - size
-                                drawMobileButton(7, x, y, size*2, size, _global._mobileFiring[0]===4?"Main Firing":"Alt Firing");
-                                drawMobileButton(8, x*2.25, y, size, size, "Q");
-                            }
-                        }
                     }
                 };
                 if (_global.mobile) scaleScreenRatio(1 / ratio, true);
-            }
-
-            if (_player.pepperspray.apply || _player.pepperspray.blurMax > 0) {
-                ctx.filter = `blur(${_player.pepperspray.blurAmount}px)`;
-                ctx.drawImage(c, 0, 0, _global._screenWidth, _global._screenHeight);
-                ctx.filter = "none";
-                if (!_player.pepperspray.apply && _player.pepperspray.blurAmount != 0) {
-                    _player.pepperspray.blurAmount--
-                    if (_player.pepperspray.blurAmount == 0) _player.pepperspray.blurMax = 0;
-                } else if (_player.pepperspray.blurAmount < _player.pepperspray.blurMax) _player.pepperspray.blurAmount++;
-            }
-
-            if (_player.lsd) {
-                ctx.filter = `hue-rotate(${Math.sin(Date.now() / 600) * 360}deg)`;
-                ctx.drawImage(c, 0, 0, _global._screenWidth, _global._screenHeight);
-                ctx.filter = "none";
-            }
-
-            if(_global.drawPoint){
-                ctx.fillStyle = "red"
-                ctx.globalAlpha = 0.5
-                drawGuiCircle(_global.drawPoint.x, _global.drawPoint.y, 25)
             }
 
             ctx.filter = ["none", "contrast(1000%)", "grayscale(100%)", "grayscale(28%)", "invert(100%)", "sepia(75%)"][["Disabled", "Saturated", "Grayscale", "Dramatic", "Inverted", "Sepia"].indexOf(_config.filter)];
@@ -9697,89 +9093,35 @@ function RememberScriptingIsBannable() {
                 let txt = "";
                 if (_global.finalKillers.length) {
                     txt = "🔪 Succumbed to";
-                    for (let i = 0; i < _global.finalKillers.length; i++) txt += " " + _util._addArticle(_mockups.get(_global.finalKillers[i]).name) + " and";
+                    for (let i = 0; i < _global.finalKillers.length; i++) txt += " " + _util._addArticle(_mockups[_global.finalKillers[i]].name) + " and";
                     txt = txt.slice(0, -4) + ".";
                 } else txt += "🔪 Well that was kinda dumb, huh?";
                 return txt;
             };
         return function () {
-            let glideDuration = 750
-            let glide;
-            let getGlide;
-            let getAlpha;
-            if(_global._deathScreenState === 0){// FADE IN
-                if(_config.fancyAnimations){ 
-                    glide = (Date.now()-(_global._diedAt-3000))/glideDuration
-                    let glideSuber = 0
-                    getGlide = function(){
-                        glideSuber += 0.025
-                        return bounceyLerp.out(Math.min(glide + glideSuber, 1))
-                    }
-                    let alphaEquation = (Math.min(1, Math.min(1, glide) + 0.25)) // Broooo litterally meeeeee
-                    getAlpha = function(){
-                        return alphaEquation
-                    }
-                    _clearScreen(color.black, .5 * alphaEquation);
-                }else{
-                    getGlide = function(){
-                        return 1
-                    }
-                    getAlpha = function(){
-                        return 1
-                    }
-                    _clearScreen(color.black, .5);
-                }
-            }else if(_global._deathScreenState === 1){// FADE OUT
-                if (Date.now() - _global._diedAt > glideDuration){
-                    _displayAds(false)
-                    return;
-                }
-                if (_config.fancyAnimations) {
-                    glide = (Date.now() - (_global._diedAt)) / glideDuration
-                    let glideSuber = 0
-                    getGlide = function () {
-                        glideSuber += 0.025
-                        return 1 + expLerp.in(Math.min(glide + glideSuber, 1))
-                    }
-                    let alphaEquation = (1-(Math.min(1, glide))) // Sammeee onggg 🙏🙏🙏🙏
-                    getAlpha = function(){
-                        return alphaEquation
-                    }
-                    _clearScreen(color.black, .5 * alphaEquation);
-                } else {
-                    getGlide = function () {
-                        return 1
-                    }
-                    getAlpha = function(){
-                        return 1
-                    }
-                    _clearScreen(color.black, .5);
-                }
-            }
-
-            if(!_global.mobile) _displayAds(true);
-            _socket.cmd.reset()
+            _clearScreen(color.black, .25);
             let x = _global._screenWidth / 2,
                 y = _global._screenHeight / 2 - 50,
                 picture = getEntityImageFromMockup(_gui._type, _gui._color),
                 len = 140,
-                position = _mockups.get(_gui._type).position,
+                position = _mockups[_gui._type].position,
                 scale = len / position.axis,
                 xx = _global._screenWidth / 2 - scale * position.middle.x * .707,
                 yy = _global._screenHeight / 2 - 35 + scale * position.middle.x * .707,
                 delay = Math.ceil((_global._diedAt - Date.now()) / 1000);
-            _player.pepperspray.apply = false;
-            _player.lsd = false;
-            drawEntity(xx - 190 - len / 2, (yy - 10) * getGlide(), picture, 1.5, getAlpha(), .5 * scale / picture.realSize, -Math.PI / 4);
-            ctx.globalAlpha = getAlpha()
-            drawText(_global._deathSplashOverride || _global._deathSplash[_global._deathSplashChoice], x, (y - 80) * getGlide(), 10, color.guiwhite, "center");
-            drawText("Level " + _gui._skill.getLevel() + " " + _player._label, x - 170, (y - 30) * getGlide(), 24, color.guiwhite);
-            drawText("Final Score: " + _util._formatLargeNumber(Math.round(_global.finalScore.get())), (x - 170), (y + 25) * getGlide(), 50, color.guiwhite);
-            drawText("⌛ Survived for " + _util._formatTime(Math.round(_global.finalLifetime.get())) + ".", (x - 170), (y + 55) * getGlide(), 16, color.guiwhite);
-            drawText(getKills(), (x - 170), (y + 77) * getGlide(), 16, color.guiwhite);
-            drawText(getDeath(), (x - 170), (y + 99) * getGlide(), 16, color.guiwhite);
-            drawText("⌚ Died on " + _global.deathDate, (x - 170), (y + 121) * getGlide(), 16, color.guiwhite);
-            drawText(delay > 0 ? "You may respawn in " + delay + " second" + (delay === 1 ? "" : "s") + "." : "Press enter to respawn!", x, (y + 147) * getGlide(), 16, color.guiwhite, "center");
+            ctx.globalAlpha = 0.25;
+            ctx.fillStyle = color.black;
+            drawGuiRoundRect(_global._screenWidth / 2 - 400, _global._screenHeight / 2 - 200, 800, 365, 25);
+            ctx.globalAlpha = 1;
+            drawEntity(xx - 190 - len / 2, yy - 10, picture, 1.5, 1, .5 * scale / picture.realSize, -Math.PI / 4, 1);
+            drawText(_global._deathSplash[_global._deathSplashChoice], x, y - 80, 10, color.guiwhite, "center");
+            drawText("Level " + _gui._skill.getLevel() + " " + _mockups[_gui._type].name, x - 170, y - 30, 24, color.guiwhite);
+            drawText("Final Score: " + _util._formatLargeNumber(Math.round(_global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
+            drawText("⌛ Survived for " + _util._formatTime(Math.round(_global.finalLifetime.get())) + ".", x - 170, y + 55, 16, color.guiwhite);
+            drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
+            drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
+            drawText("⌚ Died on " + _global.deathDate, x - 170, y + 121, 16, color.guiwhite);
+            drawText(delay > 0 ? "You may respawn in " + delay + " second" + (delay === 1 ? "" : "s") + "." : "Press enter to respawn!", x, y + 147, 16, color.guiwhite, "center");
             _global._forceTwiggle = false;
         };
     }();
@@ -9812,15 +9154,10 @@ function RememberScriptingIsBannable() {
         drawText(error, _global._screenWidth / 2, _global._screenHeight / 2 + 30 + offset, 15, color.red, "center");
         drawText("Please take a screenshot and report this to a dev", _global._screenWidth / 2, _global._screenHeight / 2 + 45 + offset, 15, color.red, "center");
     };
-    let _gameDrawFindingServer = function () {
-        _clearScreen(color.white, 1);
-        drawText("Finding a server...", _global._screenWidth / 2, _global._screenHeight / 2, 30, color.guiwhite, "center");
-        drawText("This may take around 30 seconds due to a new server being made!", _global._screenWidth / 2, _global._screenHeight / 2 + 75, 15, color.guiwhite, "center");
-    };
     let _gameDrawLoadingMockups = function () {
         _clearScreen(color.white, 1);
         drawText("Loading mockups...", _global._screenWidth / 2, _global._screenHeight / 2, 30, color.guiwhite, "center");
-        drawText("This may take a while depending on your device speed and internet speed!", _global._screenWidth / 2, _global._screenHeight / 2 + 75, 15, color.guiwhite, "center");
+        drawText("This may take a while!", _global._screenWidth / 2, _global._screenHeight / 2 + 75, 15, color.guiwhite, "center");
     };
     let _gameDrawQueue = function () {
         let splash = _global._tipSplash[Math.floor(Math.random() * _global._tipSplash.length)],
@@ -9930,12 +9267,11 @@ function RememberScriptingIsBannable() {
     const conv = str => `${str}`.replaceAll("\n", "").replaceAll(" ", "");
     let nextTime = 0;
     function _animloop() {
-        _global.animLoopHandle = window.requestAnimFrame(_animloop);
         if (nextTime < performance.now()) {
             _global._fpsc++;
             try {
                 if (_global._tankMenuColorReal >= 185) _global._tankMenuColorReal = 100;
-                _global._tankMenuColorReal += 0.16;
+                _global._tankMenuColorReal += 0.25;
                 _global._tankMenuColor = _global._tankMenuColorReal | 0;
                 _player._renderv += (_player._view - _player._renderv) / 30;
                 let ratio = getRatio();
@@ -9944,51 +9280,30 @@ function RememberScriptingIsBannable() {
                 if (_global._gameStart && !_global._disconnected) {
                     _global.time = Date.now(); //getNow();
                     if (_global.time - lastPing > 1000) {
-                        _socket.ping();
+                        _socket.ping(_global.time);
                         lastPing = _global.time;
                         metrics._rendertime = renderTimes;
                         renderTimes = 0;
                         metrics._updatetime = updateTimes;
                         updateTimes = 0;
                     }
-                    if (_global._debug > 3 && _global.time - lastServerStat > 1000 + 150) {// make sure to update this on the server if you change the time
-                        _socket.talk("da")
-                        lastServerStat = _global.time
-                    }
                     metrics._lag = _global.time - _player._time;
                 }
                 if (_global.inQueue === 2) _gameDrawRankedResults();
                 else if (_global.inQueue) _gameDrawQueue();
-                else if (!window.rivetServerFound) _gameDrawFindingServer();
                 else if (_global._gameStart) {
                     if (_mockups.length === 0) _gameDrawLoadingMockups();
                     else {
                         gameDraw(ratio);
                     };
-                } else if (!_global._disconnected) {
-                    _gameDrawBeforeStart();
-                }
-                _gameDrawDead();
+                } else if (!_global._disconnected) _gameDrawBeforeStart();
+                if (_global._died && !_global.inQueue) _gameDrawDead();
                 if (_global._disconnected) _gameDrawDisconnected();
             } catch (error) {
                 _gameDrawError(error)
             }
             nextTime += _global._fpscap;
         }
+        _global.animLoopHandle = window.requestAnimFrame(_animloop);
     };
-    document.getElementById("wrapperWrapper").onclick = () => {
-        if (document.getElementById("startMenuWrapper")) {
-            return
-        }
-        document.getElementById("gameCanvas").focus()
-    }
-}
-
-let startInterval = setInterval(() => {
-    if (!window.preloadsDoneCooking) {
-        return
-    }
-    clearInterval(startInterval)
-    if (!window.didMainLoad) RememberScriptingIsBannable()
-    window.onload()
-})
+}()

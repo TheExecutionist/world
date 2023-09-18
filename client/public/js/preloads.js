@@ -86,7 +86,7 @@ const isEvent = window.location.hostname === "event.woomy.app";
     }
 
     // Button onclicks
-    document.getElementById("signInButton").onclick = () => window.location.href = ("https://discord.com/api/oauth2/authorize?client_id=1116884853967814676&redirect_uri=https%3A%2F%2Fwoomy-api.glitch.me%2FdiscordOauth&response_type=code&scope=identify")
+    document.getElementById("signInButton").onclick = () => window.location.href = ("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
     document.getElementById("signInOut").onclick = () => {
         localStorage.removeItem("discordCode")
         window.location.reload()
@@ -112,66 +112,47 @@ const isEvent = window.location.hostname === "event.woomy.app";
         }).catch(err => console.error(err))
     }
 
-
-    window.servers = (() => {
-        fetch("https://woomy-api.glitch.me/allServers").then(res => res.json()).then((data) => {
-            data = data.data
-            window.servers = data
-            fetch("https://matchmaker.api.rivet.gg/v1/lobbies/list", {}).then(res => res.json()).then((data) => {
-                window.lobbies = data.lobbies
-                window.preloadsDoneCooking = true
-            }).catch((err) => {
-                console.error(err)
-                alert("Failed to load servers, an update might have just released, you are getting rate limitted, or the rivet API is down. Please wait a bit and try reloading.")
-            })
-        }).catch((err) => {
-            console.error(err)
-            alert("Failed to find the servers, the woomy API might be down (let a developer know). But first, please try reloading the page!")
-        })
-    })()
-
-    let interval = setInterval(async function () {
-        if (window.gameStarted) {
-            clearInterval(interval)
-            return
+    window.servers = [
+        { rivetGamemode: "a", serverGamemode: "Free For All", ip: window.location.hostname, loadData: !0, secure: !0, port: -1, game_mode_id: 0, region_id: "Glitch" }
+    ]
+    window.lobbies = [
+        { rivetGamemode: "a", serverGamemode: "Free For All", ip: window.location.hostname, loadData: !0, secure: !0, port: -1, game_mode_id: 0, region_id: "Glitch" }
+    ]
+    window.lobbies.forEach(server => {
+        //if (server.loadData) {
+            let url = `${server.secure ? "https" : "http"}://${server.ip}${server.port === -1 ? "" : `:${server.port}`}/pingData.json`
+            fetch(url).then(response => response.json().then(json => {
+                server.id = "server_" + server.name;
+                server.serverGamemode = json.mode;
+                server.total_player_count = json.players;
+                server.maxPlayers = json.connectionLimit;
+                window.loadedServerData = true;
+            }).catch(error => {
+                console.error(error);
+                //servers = servers.filter(server => server.name !== this.name);
+            }));
+    })
+    window.servers.forEach(server => {
+        if (server.loadData) {
+            let url = `${server.secure ? "https" : "http"}://${server.ip}${server.port === -1 ? "" : `:${server.port}`}/pingData.json`
+            fetch(url).then(response => response.json().then(json => {
+                server.id = "server_" + server.name;
+                server.serverGamemode = json.mode;
+                server.total_player_count = json.players;
+                server.maxPlayers = json.connectionLimit;
+                window.loadedServerData = true;
+            }).catch(error => {
+                console.error(error);
+                //servers = servers.filter(server => server.name !== this.name);
+            }));
         }
-        try {
-            await fetch("https://matchmaker.api.rivet.gg/v1/lobbies/list", {}).then(res => res.json()).then((data) => {
-                window.lobbies = data.lobbies
-            })
-        } catch (err) {}
-    }, 15000)
+         
+    })
+
 })();
 async function getFullURL(data, ws) {
-    let res = null
-    if (ws) {
-        try {
-            if (!isLocal) {
-                let {
-                    RivetClient
-                } = await import("./rivet-api.js")
-                let client = new RivetClient({})
-                if (data[0]) {
-                    res = await client.matchmaker.lobbies.join({
-                        lobbyId: data[0]
-                    })
-                } else if (data[1].rivetGamemode !== undefined) {
-                    res = await client.matchmaker.lobbies.find({
-                        gameModes: [data[1].rivetGamemode]
-                    })
-                } else {
-                    alert("Error with preloading fullURL, rivet connection")
-                }
-            }
-            window.rivetLobby = isLocal ? "0" : res.lobby.lobbyId
-            window.rivetPlayerToken = isLocal ? "0" : res.player.token
-            window.rivetServerFound = true
-        } catch (err) {
-            console.error(err)
-            alert("The server you are trying to join is most likely full, you are at the ip limit, or an error occured, sorry! Please wait a bit then try again.")
-        }
-        return isLocal ? "ws://localhost:3001/?" : (`ws${window.location.protocol==="https:" ? "s" : ""}://${res.ports["default"].host}/?`)
-    } else {
-        return isLocal ? "http://localhost:3001/" : (`http${window.location.protocol==="https:" ? "s" : ""}://${window.location.hostname}${!window.location.port ? "/" : `:${window.location.port}/`}`);
-    }
+    return `wss://${window.location.hostname}/?`
+}
+async function getTheURL(url) {
+    return `wss://${url}/?`
 }
