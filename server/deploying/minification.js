@@ -117,7 +117,7 @@ console.log("Uglify process complete.");
 console.log("Starting Obfuscation process...");
 code = result.code;
 let JavaScriptObfuscator = require('javascript-obfuscator');
-result = JavaScriptObfuscator.obfuscate(result.code, {
+/*result = JavaScriptObfuscator.obfuscate(result.code, {
     compact: true,
     controlFlowFlattening: false,
     disableConsoleOutput: false,
@@ -140,11 +140,11 @@ result = JavaScriptObfuscator.obfuscate(result.code, {
     stringArrayWrappersType: 'variable',
     stringArrayThreshold: 0.75,
     unicodeEscapeSequence: false,
-    domainLock: ["localhost", "", "beta.woomy.app", "woomy.app", "woomy-arras.netlify.app", "woomy-arras.xyz", "www.woomy-arras.xyz", "development.woomy-arras.xyz"],
-    domainLockRedirectUrl: "woomy.app",
+    //:domainLock: ["localhost", "tc-test-event.glitch.me", "beta.woomy.app", "woomy.app", "woomy-arras.netlify.app", "woomy-arras.xyz", "www.woomy-arras.xyz", "development.woomy-arras.xyz"],
+    //domainLockRedirectUrl: "woomy.app",
     debugProtection: false,
     debugProtectionInterval: 4000,
-});
+});*/
 console.log("Obfuscation complete.");
 console.log()
 let string = `// Production code produced on ${new Date().toLocaleString().split(',')[0]}\n// Remember kids, scripting is bannable!\n\n !function () {${result}}()`;
